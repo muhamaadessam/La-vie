@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:la_vie/presentaion/screens/LoginScreen/loginScreen.dart';
+import 'package:la_vie/presentation/screens/LoginScreen/loginScreen.dart';
+import 'package:la_vie/presentation/screens/SplashScreen/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'La Vie',
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: SplashScreen(),
     );
   }
 }
