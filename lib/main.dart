@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:la_vie/presentation/screens/LoginScreen/loginScreen.dart';
+import 'package:la_vie/Shared/Network/Remote/dio_helper.dart';
 import 'package:la_vie/presentation/screens/SplashScreen/splash_screen.dart';
 
 void main() {
+  DioHelper.init();
   runApp(const MyApp());
 }
 
@@ -15,7 +16,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'La Vie',
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+      ),
+      home: const SplashScreen(),
     );
   }
 }

@@ -24,7 +24,11 @@ class _SplashScreenState extends State<SplashScreen> {
       width: double.infinity,
       color: Colors.white,
       child: Center(
-        child: Image.asset('assets/images/la_vie_logo.png',height: 81,width: 408,),
+        child: Image.asset(
+          'assets/images/la_vie_logo.png',
+          height: 81,
+          width: 408,
+        ),
       ),
     );
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:la_vie/Shared/Network/Remote/dio_helper.dart';
+import 'package:la_vie/presentation/screens/HomeScreen/home_screen.dart';
 
 import 'components.dart';
 import 'loginBackground.dart';
@@ -71,7 +73,21 @@ class LoginScreen extends StatelessWidget {
                   style: TextButton.styleFrom(
                     backgroundColor: const Color.fromRGBO(26, 188, 0, 1),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(),
+                      ),
+                    );
+                   /* DioHelper.getData(
+                        url: '/api/v1/seeds',
+                        query: {'type': 'GARDENIA PLANT'}).then((value) {
+                      print(value.data.toString());
+                    }).catchError((onError) {
+                      print(onError.toString());
+                    });*/
+                  },
                   child: const SizedBox(
                     width: double.infinity,
                     height: 48,
@@ -115,7 +131,6 @@ class LoginScreen extends StatelessWidget {
                 const SizedBox(
                   height: 24,
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
