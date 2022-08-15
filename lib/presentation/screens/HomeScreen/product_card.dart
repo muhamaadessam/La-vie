@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:la_vie/presentation/screens/ProductScreen/productScreen.dart';
 
 class ProductCard extends StatelessWidget {
   final List product;
@@ -80,12 +81,14 @@ class ProductCard extends StatelessWidget {
                           height: 8,
                         ),
                         ElevatedButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromRGBO(26, 188, 0, 1),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ProductScreen(),
+                              ),
+                            );
+                          },
                           child: const SizedBox(
                             width: double.infinity,
                             height: 35,

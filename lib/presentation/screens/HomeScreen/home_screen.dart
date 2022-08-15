@@ -1,12 +1,30 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:la_vie/Shared/Constant/colors.dart';
 import 'package:la_vie/presentation/screens/HomeScreen/filter_par.dart';
 import 'package:la_vie/presentation/screens/HomeScreen/product_card.dart';
 import 'package:la_vie/presentation/screens/HomeScreen/search_bar.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  Future<void> scanQR() async {
+    String barcodeScanRes;
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ffffff', 'Cancel', false, ScanMode.QR);
+      print(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +35,7 @@ class HomeScreen extends StatelessWidget {
       'GARDENIA PLANT',
       '70'
     ];
+    int? index1;
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
@@ -31,7 +50,7 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         color: Colors.white,
         buttonBackgroundColor: primaryColor,
-        index: 2,
+        index: index1 ?? 0,
         items: [
           SizedBox(
               height: 24,
@@ -68,6 +87,15 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ],
+        onTap: (index) {
+          print(index);
+          if (index == 0) {
+            print(index1);
+          } else if (index == 1) {
+            scanQR();
+            print(index1);
+          }
+        },
       ),
       body: Column(
         children: [
