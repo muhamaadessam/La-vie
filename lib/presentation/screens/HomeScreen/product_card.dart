@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:la_vie/presentation/screens/ProductScreen/productScreen.dart';
+
+import '../Exam/qustion_screen.dart';
 
 class ProductCard extends StatelessWidget {
   final List product;
@@ -85,7 +86,7 @@ class ProductCard extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const ProductScreen(),
+                                builder: (context) => const QuestionScreen(),
                               ),
                             );
                           },

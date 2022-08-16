@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
       title: 'La Vie',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        appBarTheme: const AppBarTheme(color: Colors.white),
         scaffoldBackgroundColor: Colors.white,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: TextButton.styleFrom(
