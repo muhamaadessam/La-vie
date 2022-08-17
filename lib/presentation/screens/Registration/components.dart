@@ -4,13 +4,16 @@ import 'package:google_fonts/google_fonts.dart';
 class CustomTextFormField extends StatelessWidget {
   final String? title;
   final bool? isPassword;
+  final FormFieldValidator<String>? validation;
   final TextEditingController? controller;
+  final TextInputType? keyboardType;
 
   CustomTextFormField({
     Key? key,
-    @required this.title,
-    @required this.isPassword,
-    @required this.controller,
+    required this.title,
+    required this.isPassword,
+    required this.controller,
+    required this.validation, this.keyboardType,
   });
 
   @override
@@ -29,7 +32,10 @@ class CustomTextFormField extends StatelessWidget {
           height: 8,
         ),
         TextFormField(
+          keyboardType:keyboardType,
+          validator: validation,
           controller: controller,
+          obscureText: isPassword!,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
@@ -43,4 +49,3 @@ class CustomTextFormField extends StatelessWidget {
     );
   }
 }
-

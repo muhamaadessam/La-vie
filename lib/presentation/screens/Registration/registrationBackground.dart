@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-class LoginBackground extends StatelessWidget {
+class RegistrationBackground extends StatelessWidget {
   final Widget? child;
-  const LoginBackground({@required this.child});
+
+  const RegistrationBackground({@required this.child});
 
   @override
   Widget build(BuildContext context) {

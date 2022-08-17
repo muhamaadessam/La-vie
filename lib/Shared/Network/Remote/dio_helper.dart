@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:la_vie/Shared/Network/Remote/constant.dart';
 
 class DioHelper {
   static Dio? dio;
@@ -7,17 +8,36 @@ class DioHelper {
   static init() {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'https://lavie.orangedigitalcenteregypt.com/',
+        baseUrl: url,
         receiveDataWhenStatusError: true,
       ),
     );
   }
 
- static Future<Response> getData(
-      {@required String? url, @required Map<String,dynamic>? query}) async {
+  static Future<Response> getData(
+      {@required String? endPoint,
+      @required String? method,
+      @required Map<String, dynamic>? query}) async {
     return await dio!.get(
-      url!,
+      '$endPoint$method',
       queryParameters: query,
+    );
+  }
+
+  static Future<Response> postData({
+    @required String? endPoint,
+    @required String? method,
+    @required dynamic data,
+    String? accessToken,
+  }) async {
+    dio!.options.headers = {
+      "Content-type": "application/json",
+      'accessToken': accessToken,
+    };
+
+    return await dio!.post(
+      '$url$endPoint$method',
+      data: data,
     );
   }
 }

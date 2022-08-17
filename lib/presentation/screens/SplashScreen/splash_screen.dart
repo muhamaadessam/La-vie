@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:la_vie/presentation/screens/LoginScreen/loginScreen.dart';
+import 'package:la_vie/presentation/screens/HomeScreen/home_screen.dart';
+import 'package:la_vie/presentation/screens/Registration/loginScreen.dart';
+import 'package:la_vie/presentation/screens/Registration/registrationScreen.dart';
+
+import '../../Components/navigation_bar.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -14,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // TODO: implement initState
     super.initState();
     Future.delayed(const Duration(seconds: 3)).then((value) => {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> LoginScreen()))
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> const RegistrationScreen()))
     });
   }
   @override
@@ -33,3 +37,10 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+/*return BlocProvider(
+      create: (BuildContext context) => AppCubit(),
+      child: BlocConsumer<AppCubit, AppState>(
+        listener: (context, state) => () {},
+        builder: (context, state) => ,
+      ),
+    );*/
