@@ -16,17 +16,7 @@ class LoginScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => SignInCubit(),
       child: BlocConsumer<SignInCubit, SignInStates>(
-        listener: (context, state) => () {
-          if (state is LoginSuccessState) {
-            if (state.signIn!.type != null) {
-              print(state.signIn!.data!.userId);
-            } else {
-              print(state.signIn!.message);
-            }
-          } else if (state is LoginErrorState) {
-            print('errors : ${state.error!.toString()}');
-          }
-        },
+        listener: (context, state) => () {},
         builder: (context, state) => Scaffold(
           body: SingleChildScrollView(
             child: Padding(
@@ -71,17 +61,11 @@ class LoginScreen extends StatelessWidget {
                     state is LoginLoadingState
                         ? const Center(child: CircularProgressIndicator())
                         : ElevatedButton(
-                            onPressed: () {
+                            onPressed: (){
                               if (formKey.currentState!.validate()) {
-                                SignInCubit.get(context).userSignIn(
+                                SignInCubit.get(context).userSignIn(context,
                                     email: emailController!.text,
                                     password: passwordController!.text);
-                                /*Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const BottomBar(),
-                                  ),
-                                );*/
                               }
                               /* "email": "me1573@gmail.com",
                                  "password": "MmEe@15920"*/

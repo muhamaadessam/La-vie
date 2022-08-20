@@ -2,8 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:la_vie/Shared/Network/Local/cash_helper.dart';
 import 'package:la_vie/Shared/Network/Remote/dio_helper.dart';
-import 'package:la_vie/presentation/screens/Registration/loginScreen.dart';
+import 'package:la_vie/presentation/screens/Registration/cubit/cubit.dart';
 import 'package:la_vie/presentation/screens/SplashScreen/splash_screen.dart';
 
 import 'Shared/Cubit/cubit.dart';
@@ -11,8 +12,10 @@ import 'Shared/Cubit/cubit_observer.dart';
 import 'Shared/Cubit/states.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
+  CashHelper.init();
   runApp(const MyApp());
 }
 
@@ -22,8 +25,33 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => AppCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (BuildContext context) => AppCubit(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => SeedsCubit(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => SignInCubit(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => ToolsCubit(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => ProductsCubit(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => PlantsCubit(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => UserCubit(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => CartCubit(),
+        ),
+      ],
       child: BlocConsumer<AppCubit, AppState>(
         listener: (context, state) => () {},
         builder: (context, state) => MaterialApp(

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:la_vie/Shared/Constant/colors.dart';
-import 'package:la_vie/Shared/Network/Remote/constant.dart';
 import 'package:la_vie/presentation/Components/navigation_bar.dart';
 import 'package:la_vie/presentation/screens/Registration/registrationBackground.dart';
 import 'package:la_vie/presentation/screens/Registration/sign_up.dart';
+import 'package:la_vie/presentation/screens/Registration/signin_with%20google.dart';
 
 import '../../../Shared/Cubit/cubit.dart';
 import '../../../Shared/Cubit/states.dart';
@@ -24,6 +24,7 @@ class RegistrationScreen extends StatelessWidget {
       listener: (context, state) => () {},
       builder: (context, state) => Scaffold(
         body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: RegistrationBackground(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 45.0),
@@ -34,8 +35,11 @@ class RegistrationScreen extends StatelessWidget {
                     const SizedBox(
                       height: 128,
                     ),
-                    Image.asset(
-                      'assets/images/la_vie_logo.png',
+                    SizedBox(
+                      height: 50,
+                      child: Image.asset(
+                        'assets/images/la_vie_logo.png',
+                      ),
                     ),
                     const SizedBox(
                       height: 64,
@@ -68,7 +72,7 @@ class RegistrationScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                     SingleChildScrollView(
+                    SingleChildScrollView(
                       child: SizedBox(
                         height: 400,
                         child: TabBarView(
@@ -120,11 +124,19 @@ class RegistrationScreen extends StatelessWidget {
                           child: Image.asset('assets/images/Google.png'),
                           onPressed: () {
                             print("google");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignInWithGoogle()));
                           },
                         ),
                         TextButton(
                           child: Image.asset('assets/images/Facebook.png'),
                           onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const BottomBar()));
                             print("Facebook");
                           },
                         ),

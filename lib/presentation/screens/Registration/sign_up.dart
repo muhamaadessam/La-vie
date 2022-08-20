@@ -22,7 +22,7 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context)=> SignUpCubit(),
+      create: (context) => SignUpCubit(),
       child: BlocConsumer<SignUpCubit, SignUpStates>(
         listener: (context, state) => () {},
         builder: (context, state) => Scaffold(
@@ -81,7 +81,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                     CustomTextFormField(
                       title: 'Password',
-                      isPassword: true,
+                      isPassword: false,
                       controller: passwordController,
                       validation: (String? value) {
                         if (value!.isEmpty) {
@@ -95,7 +95,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                     CustomTextFormField(
                       title: 'Confirm Password',
-                      isPassword: true,
+                      isPassword: false,
                       controller: confirmPasswordController,
                       validation: (String? value) {
                         if (value!.isEmpty) {
@@ -107,23 +107,25 @@ class SignUpScreen extends StatelessWidget {
                     const SizedBox(
                       height: 64,
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          SignUpCubit.get(context).userSignUp(
-                              firstName: firstNameController!.text,
-                              lastName: lastNameController!.text,
-                              email: emailController!.text,
-                              password: passwordController!.text);
+                    state is LoginLoadingState
+                        ? const Center(child: CircularProgressIndicator())
+                        : ElevatedButton(
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                SignUpCubit.get(context).userSignUp(
+                                    firstName: firstNameController!.text,
+                                    lastName: lastNameController!.text,
+                                    email: emailController!.text,
+                                    password: passwordController!.text);
 
-                          /*Navigator.pushReplacement(
+                                /*Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => const BottomBar(),
                                       ),
                                     );*/
-                        }
-                        /*DioHelper.postData(
+                              }
+                              /*DioHelper.postData(
                           endPoint: auth,
                           method: 'signup',
                           data: {
@@ -148,17 +150,17 @@ class SignUpScreen extends StatelessWidget {
                             return;
                           },
                         );*/
-                      },
-                      child: const SizedBox(
-                        width: double.infinity,
-                        height: 48,
-                        child: Center(
-                          child: Text(
-                            'Sign Up',
+                            },
+                            child: const SizedBox(
+                              width: double.infinity,
+                              height: 48,
+                              child: Center(
+                                child: Text(
+                                  'Sign Up',
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),

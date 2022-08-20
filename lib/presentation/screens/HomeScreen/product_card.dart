@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:la_vie/Shared/Constant/images.dart';
+import 'package:la_vie/Shared/Cubit/cubit.dart';
 
 import '../Exam/qustion_screen.dart';
 
-class ProductCard extends StatelessWidget {
-  final List product;
+Widget productCard(context,
+    {final String? image, String? name, int? numberForAddCart, int? price}) {
 
-  const ProductCard({Key? key, required this.product}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
+  return Stack(
       //alignment: Alignment.centerLeft,
       children: [
         Column(
@@ -38,26 +37,30 @@ class ProductCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                               CartCubit.get(context).removeProductToCart();
+                              },
                               child: Container(
-                                  width: 16,
-                                  height: 16,
+                                  width: 24,
+                                  height: 24,
                                   color: const Color.fromRGBO(247, 247, 247, 1),
-                                  child:
-                                      Image.asset('assets/images/minus.png')),
+                                  child: Image.asset('assets/images/minus.png')),
                             ),
                             const SizedBox(
                               width: 8,
                             ),
-                            Text(product[1]),
+                            Text('${CartCubit.get(context).counter}'),
                             const SizedBox(
                               width: 8,
                             ),
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                CartCubit.get(context).addProductToCart();
+                                print(CartCubit.get(context).counter);
+                              },
                               child: Container(
-                                  width: 16,
-                                  height: 16,
+                                  width: 24,
+                                  height: 24,
                                   color: const Color.fromRGBO(247, 247, 247, 1),
                                   child: Image.asset('assets/images/plus.png')),
                             ),
@@ -65,14 +68,14 @@ class ProductCard extends StatelessWidget {
                         ),
                         const Spacer(),
                         Text(
-                          product[2],
+                          name!,
                           style: GoogleFonts.roboto(
                             fontSize: 16,
                             color: Colors.black,
                           ),
                         ),
                         Text(
-                          '${product[3]} EGP',
+                          '$price EGP',
                           style: GoogleFonts.roboto(
                             fontSize: 12,
                             color: Colors.black,
@@ -83,12 +86,7 @@ class ProductCard extends StatelessWidget {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const QuestionScreen(),
-                              ),
-                            );
+
                           },
                           child: const SizedBox(
                             width: double.infinity,
@@ -114,13 +112,11 @@ class ProductCard extends StatelessWidget {
           child: SizedBox(
             width: 100,
             height: 150,
-            child: Image.asset(
-              product[0],
-              //fit: BoxFit.scaleDown,
-            ),
+            child: image != 'https://lavie.orangedigitalcenteregypt.com'
+                ? Image(image: NetworkImage(image!))
+                : Image.asset('${imageAsset}product_image.png'),
           ),
         ),
       ],
     );
-  }
 }

@@ -1,18 +1,18 @@
-class SignInModel {
+class UserModel {
   String? type;
   String? message;
-  UserData? data;
+  Data? data;
 
-  SignInModel({this.type, this.message, this.data});
+  UserModel({this.type, this.message, this.data});
 
-  SignInModel.fromJson(Map<String, dynamic> json) {
+  UserModel.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     message = json['message'];
-    data = json['data'] != null ?  UserData.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['type'] = type;
     data['message'] = message;
     if (this.data != null) {
@@ -22,7 +22,7 @@ class SignInModel {
   }
 }
 
-class UserData {
+class Data {
   String? userId;
   String? firstName;
   String? lastName;
@@ -32,7 +32,7 @@ class UserData {
   String? userPoints;
   List<String>? userNotification;
 
-  UserData(
+  Data(
       {this.userId,
         this.firstName,
         this.lastName,
@@ -42,7 +42,7 @@ class UserData {
         this.userPoints,
         this.userNotification});
 
-  UserData.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
     firstName = json['firstName'];
     lastName = json['lastName'];

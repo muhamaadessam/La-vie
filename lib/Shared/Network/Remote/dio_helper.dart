@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:la_vie/Shared/Network/Remote/constant.dart';
 
+import '../Local/cash_helper.dart';
+
 class DioHelper {
   static Dio? dio;
 
@@ -15,12 +17,33 @@ class DioHelper {
   }
 
   static Future<Response> getData(
-      {@required String? endPoint,
-      @required String? method,
-      @required Map<String, dynamic>? query}) async {
+      {required String? endPoint,
+      required String? method,
+      String? refreshToken,
+      Map<String, dynamic>? query}) async {
+    dio!.options.headers = {
+      "Content-type": "application/json",
+      'Authorization': 'Bearer ${CashHelper.get(key: 'accessToken')}',
+    };
     return await dio!.get(
       '$endPoint$method',
       queryParameters: query,
+    );
+  }
+
+  static Future<Response> patchData({
+    required String? endPoint,
+    required String? method,
+    String? refreshToken,
+    required dynamic data,
+  }) async {
+    dio!.options.headers = {
+      "Content-type": "application/json",
+      'Authorization': 'Bearer ${CashHelper.get(key: 'accessToken')}',
+    };
+    return await dio!.put(
+      '$endPoint$method',
+      data: data,
     );
   }
 
@@ -28,11 +51,10 @@ class DioHelper {
     @required String? endPoint,
     @required String? method,
     @required dynamic data,
-    String? accessToken,
   }) async {
     dio!.options.headers = {
       "Content-type": "application/json",
-      'accessToken': accessToken,
+      'Authorization': 'Bearer ${CashHelper.get(key: 'accessToken')}',
     };
 
     return await dio!.post(
