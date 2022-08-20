@@ -31,22 +31,22 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => AppCubit(),
         ),
         BlocProvider(
-          create: (BuildContext context) => SeedsCubit(),
+          create: (BuildContext context) => SeedsCubit()..getSeedsData(),
         ),
         BlocProvider(
           create: (BuildContext context) => SignInCubit(),
         ),
         BlocProvider(
-          create: (BuildContext context) => ToolsCubit(),
+          create: (BuildContext context) => ToolsCubit()..getToolsData(),
         ),
         BlocProvider(
-          create: (BuildContext context) => ProductsCubit(),
+          create: (BuildContext context) => ProductsCubit()..getProductsData(),
         ),
         BlocProvider(
-          create: (BuildContext context) => PlantsCubit(),
+          create: (BuildContext context) => PlantsCubit()..getPlantsData(),
         ),
         BlocProvider(
-          create: (BuildContext context) => UserCubit(),
+          create: (BuildContext context) => UserCubit()..getUserData(),
         ),
         BlocProvider(
           create: (BuildContext context) => CartCubit(),

@@ -17,10 +17,6 @@ class HomeScreen extends StatelessWidget {
     ToolsCubit? tools = ToolsCubit.get(context);
     ProductsCubit? products = ProductsCubit.get(context);
     PlantsCubit? plants = PlantsCubit.get(context);
-    seeds.getSeedsData();
-    tools.getToolsData();
-    products.getProductsData();
-    plants.getPlantsData();
     // print('plants data: ${plants.plantsModel!.data![0].description.toString()}');
     return BlocConsumer<SeedsCubit, SeedsStates>(
       listener: (context, state) => () {},
