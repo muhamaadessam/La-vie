@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:la_vie/presentation/screens/Blogs/card_blogs.dart';
 
 import '../../../Shared/Constant/text.dart';
 
@@ -14,7 +15,7 @@ class BlogsScreen extends StatelessWidget {
         title: Text(
           'Blogs',
           style:
-          textStyle(color: Colors.black, weight: FontWeight.w700, size: 21),
+              textStyle(color: Colors.black, weight: FontWeight.w700, size: 21),
         ),
         leading: IconButton(
           onPressed: () {
@@ -24,6 +25,17 @@ class BlogsScreen extends StatelessWidget {
             Icons.arrow_back_ios,
             color: Colors.black,
           ),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.separated(
+          itemBuilder: (context, index) => const BlogsCard(),
+          separatorBuilder: (context, index) => const SizedBox(
+            height: 16,
+          ),
+          itemCount: 20,
+          physics: const BouncingScrollPhysics(),
         ),
       ),
     );

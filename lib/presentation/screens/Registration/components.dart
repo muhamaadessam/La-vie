@@ -9,7 +9,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType? keyboardType;
   final int? maxLine;
 
-  CustomTextFormField({
+  const CustomTextFormField({
     Key? key,
     required this.title,
     required this.isPassword,

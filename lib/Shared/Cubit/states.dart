@@ -1,8 +1,23 @@
+
 abstract class AppState {}
-
 class AppInitialState extends AppState {}
-
 class AppChangeBottomNavBarState extends AppState {}
+
+abstract class SignInStates {}
+class LoginInitialState extends SignInStates {}
+class LoginLoadingState extends SignInStates {}
+class LoginSuccessState extends SignInStates {}
+class LoginErrorState extends SignInStates {}
+
+abstract class HomeTabsStates {}
+class HomeTabsInitialState extends HomeTabsStates {}
+class HomeTabsChangeState extends HomeTabsStates {}
+
+abstract class SignUpStates {}
+class SignUpInitialState extends SignUpStates {}
+class SignUpLoadingState extends SignUpStates {}
+class SignUpSuccessState extends SignUpStates {}
+class SignUpErrorState extends SignUpStates {}
 
 abstract class FilterStates {}
 class FilterInitialState extends FilterStates {}
@@ -48,3 +63,23 @@ class UserInitialState extends UserStates {}
 class UserLoadingState extends UserStates {}
 class UserSuccessState extends UserStates {}
 class UserErrorState extends UserStates {}
+
+
+abstract class BlogsStates{}
+class BlogsInitialState extends BlogsStates {}
+class BlogsLoadingState extends BlogsStates {}
+class BlogsSuccessState extends BlogsStates {}
+class BlogsErrorState extends BlogsStates {}
+
+abstract class ForumsStates{}
+class ForumsInitialState extends ForumsStates {}
+class ForumsChangeFromAllToMeState extends ForumsStates {}
+class ForumsLoadingState extends ForumsStates {}
+class ForumsSuccessState extends ForumsStates {}
+class ForumsErrorState extends ForumsStates {}
+
+abstract class MyForumsStates{}
+class MyForumsInitialState extends MyForumsStates {}
+class MyForumsLoadingState extends MyForumsStates {}
+class MyForumsSuccessState extends MyForumsStates {}
+class MyForumsErrorState extends MyForumsStates {}

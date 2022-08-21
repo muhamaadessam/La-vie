@@ -4,10 +4,26 @@ import 'package:la_vie/Shared/Constant/images.dart';
 import 'package:la_vie/Shared/Constant/text.dart';
 
 class Post extends StatelessWidget {
-  const Post({Key? key}) : super(key: key);
+  const Post(
+      {Key? key,
+      this.title,
+      this.description,
+      this.imageUrl,
+      this.forumLikes,
+      this.forumComments})
+      : super(key: key);
+  final String? title;
+  final String? description;
+  final String? imageUrl;
+  final int? forumLikes;
+  final int? forumComments;
 
   @override
   Widget build(BuildContext context) {
+    ImageProvider? imageProvider;
+    imageUrl != 'https://lavie.orangedigitalcenteregypt.comnull'
+        ? imageProvider = NetworkImage(imageUrl!)
+        : Image.asset('${imageAsset}product_image.png');
     return Column(
       children: [
         Container(
@@ -16,17 +32,18 @@ class Post extends StatelessWidget {
             color: Colors.white,
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: 8.0,bottom: 8.0),
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                   child: Row(
                     children: [
                       CircleAvatar(
-                        backgroundImage: AssetImage('${imageAsset}profile.png'),
                         radius: 25,
+                        backgroundImage: imageProvider,
                       ),
                       const SizedBox(
                         width: 8,
@@ -57,7 +74,7 @@ class Post extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Title',
+                        title!,
                         style: textStyle(
                           weight: FontWeight.w700,
                           size: 18,
@@ -65,7 +82,7 @@ class Post extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'description',
+                        description!,
                         style: textStyle(
                           weight: FontWeight.w400,
                           size: 15,
@@ -77,13 +94,19 @@ class Post extends StatelessWidget {
                 ),
                 SizedBox(
                   width: double.infinity,
-                  child: Image(
-                    image: AssetImage('${imageAsset}PicPost.png'),
-                    width: double.infinity,
-                  ),
+                  child: imageUrl !=
+                          'https://lavie.orangedigitalcenteregypt.comnull'
+                      ? Image(
+                          image: NetworkImage(imageUrl!),
+                          width: double.infinity,
+                        )
+                      : Image.asset(
+                          '${imageAsset}product_image.png',
+                          width: double.infinity,
+                        ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 16.0,left: 16),
+                  padding: const EdgeInsets.only(top: 16.0, left: 16),
                   child: Row(
                     children: [
                       Row(
@@ -93,9 +116,9 @@ class Post extends StatelessWidget {
                             width: 18,
                           ),
                           Text(
-                            '  0 Like',
+                            '  ${forumLikes!} Like',
                             style: textStyle(
-                              color: const Color.fromRGBO(0, 00, 0, .6),
+                              color: const Color.fromRGBO(0, 0, 0, .6),
                             ),
                           ),
                         ],
@@ -104,7 +127,7 @@ class Post extends StatelessWidget {
                         flex: 1,
                       ),
                       Text(
-                        '2 Replies',
+                        '${forumComments!} Replies',
                         style: textStyle(
                           color: const Color.fromRGBO(0, 00, 0, .6),
                         ),
@@ -119,7 +142,6 @@ class Post extends StatelessWidget {
             ),
           ),
         ),
-
       ],
     );
   }

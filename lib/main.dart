@@ -4,13 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:la_vie/Shared/Network/Local/cash_helper.dart';
 import 'package:la_vie/Shared/Network/Remote/dio_helper.dart';
-import 'package:la_vie/presentation/screens/Registration/cubit/cubit.dart';
 import 'package:la_vie/presentation/screens/SplashScreen/splash_screen.dart';
 
 import 'Shared/Cubit/cubit.dart';
 import 'Shared/Cubit/cubit_observer.dart';
 import 'Shared/Cubit/states.dart';
-import 'Shared/Network/Remote/constant.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +33,7 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => SeedsCubit()..getSeedsData(),
         ),
         BlocProvider(
-          create: (BuildContext context) => SignInCubit(),
+          create: (BuildContext context) => SignInCubit()..signInModel.data!.accessToken,
         ),
         BlocProvider(
           create: (BuildContext context) => ToolsCubit()..getToolsData(),
@@ -51,6 +49,15 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (BuildContext context) => CartCubit(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => ForumsCubit()..getForumsData(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => MyForumsCubit()..getMyForumsData(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => HomeTapsCubit(),
         ),
       ],
       child: BlocConsumer<AppCubit, AppState>(

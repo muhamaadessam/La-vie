@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:la_vie/presentation/screens/Registration/cubit/states.dart';
+import '../../../Shared/Cubit/cubit.dart';
+import '../../../Shared/Cubit/states.dart';
 import 'components.dart';
-import 'cubit/cubit.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({Key? key}) : super(key: key);
@@ -36,6 +36,7 @@ class SignUpScreen extends StatelessWidget {
                       children: [
                         Expanded(
                           child: CustomTextFormField(
+                            keyboardType: TextInputType.text,
                             title: 'First Name',
                             isPassword: false,
                             controller: firstNameController,
@@ -53,6 +54,7 @@ class SignUpScreen extends StatelessWidget {
                         Expanded(
                           child: CustomTextFormField(
                             title: 'Last Name',
+                            keyboardType: TextInputType.text,
                             isPassword: false,
                             controller: lastNameController,
                             validation: (String? value) {
@@ -71,6 +73,7 @@ class SignUpScreen extends StatelessWidget {
                     CustomTextFormField(
                       title: 'E-mail',
                       isPassword: false,
+                      keyboardType: TextInputType.emailAddress,
                       controller: emailController,
                       validation: (String? value) {
                         if (value!.isEmpty) {
@@ -86,6 +89,7 @@ class SignUpScreen extends StatelessWidget {
                       title: 'Password',
                       isPassword: false,
                       controller: passwordController,
+                      keyboardType: TextInputType.visiblePassword,
                       validation: (String? value) {
                         if (value!.isEmpty) {
                           return 'Please enter your email';
@@ -100,6 +104,7 @@ class SignUpScreen extends StatelessWidget {
                       title: 'Confirm Password',
                       isPassword: false,
                       controller: confirmPasswordController,
+                      keyboardType: TextInputType.visiblePassword,
                       validation: (String? value) {
                         if (value!.isEmpty) {
                           return 'Please enter your email';
@@ -120,39 +125,7 @@ class SignUpScreen extends StatelessWidget {
                                     lastName: lastNameController!.text,
                                     email: emailController!.text,
                                     password: passwordController!.text);
-
-                                /*Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const BottomBar(),
-                                      ),
-                                    );*/
                               }
-                              /*DioHelper.postData(
-                          endPoint: auth,
-                          method: 'signup',
-                          data: {
-                            "email": emailController!.text,
-                            "password": passwordController!.text,
-                            "firstName": firstNameController!.text,
-                            "lastName": lastNameController!.text,
-                          },
-                        ).then(
-                          (value) {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const BottomBar(),
-                              ),
-                            );
-                            print(value.data);
-                          },
-                        ).catchError(
-                          (onError) {
-                            print("Error: ${onError.toString()}");
-                            return;
-                          },
-                        );*/
                             },
                             child: const SizedBox(
                               width: double.infinity,

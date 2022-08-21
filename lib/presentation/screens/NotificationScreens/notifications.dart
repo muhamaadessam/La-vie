@@ -17,7 +17,7 @@ class NotificationsScreen extends StatelessWidget {
           child: ListView.separated(
             shrinkWrap: true,
               physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) => const Post(),
+              itemBuilder: (context, index) => Container(width: 100,color: Colors.red,),
               separatorBuilder: (context, index) => const SizedBox(
                     height: 16,
                   ),

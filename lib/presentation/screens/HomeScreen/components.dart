@@ -2,17 +2,24 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Widget customTab({required String? text}) {
-  return  Padding(
-    padding: const EdgeInsets.all(1.0),
-    child: Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: const Color.fromRGBO(248, 248, 248, 1),
-      ),
-      width: 100,
+Widget customHomeTab({
+  required String? text,
+  required TextStyle? textStyle,
+  required ButtonStyle? buttonStyle,
+  required VoidCallback? onTab,
+}) {
+  return ElevatedButton(
+    onPressed: onTab,
+    style: buttonStyle,
+    child: SizedBox(
       height: 32,
-      child: Center(child: Text(text!)),
+      width: 51,
+      child: Center(
+        child: Text(
+          text!,
+          style: textStyle,
+        ),
+      ),
     ),
   );
 }

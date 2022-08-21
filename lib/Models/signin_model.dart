@@ -8,13 +8,13 @@ class SignInModel {
   SignInModel.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['type'] = type;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -30,18 +30,18 @@ class Data {
   Data({this.user, this.accessToken, this.refreshToken});
 
   Data.fromJson(Map<String, dynamic> json) {
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    user = json['user'] != null ?  User.fromJson(json['user']) : null;
     accessToken = json['accessToken'];
     refreshToken = json['refreshToken'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.user != null) {
-      data['user'] = this.user!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (user != null) {
+      data['user'] = user!.toJson();
     }
-    data['accessToken'] = this.accessToken;
-    data['refreshToken'] = this.refreshToken;
+    data['accessToken'] = accessToken;
+    data['refreshToken'] = refreshToken;
     return data;
   }
 }
@@ -75,14 +75,14 @@ class User {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['userId'] = this.userId;
-    data['firstName'] = this.firstName;
-    data['lastName'] = this.lastName;
-    data['email'] = this.email;
-    data['imageUrl'] = this.imageUrl;
-    data['address'] = this.address;
-    data['role'] = this.role;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['userId'] = userId;
+    data['firstName'] = firstName;
+    data['lastName'] = lastName;
+    data['email'] = email;
+    data['imageUrl'] = imageUrl;
+    data['address'] = address;
+    data['role'] = role;
     return data;
   }
 }

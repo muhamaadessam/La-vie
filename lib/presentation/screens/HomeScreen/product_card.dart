@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:la_vie/Shared/Constant/images.dart';
 import 'package:la_vie/Shared/Cubit/cubit.dart';
+import 'package:la_vie/Shared/Network/Local/cash_helper.dart';
 
 import '../Exam/qustion_screen.dart';
 
@@ -84,7 +85,9 @@ Widget productCard(context,
                         height: 8,
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          print('accessToken : ${CashHelper.get(key: 'accessToken')}');
+                        },
                         child: const SizedBox(
                           width: double.infinity,
                           height: 35,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:la_vie/presentation/screens/Registration/cubit/cubit.dart';
-import 'package:la_vie/presentation/screens/Registration/cubit/states.dart';
+import '../../../Shared/Cubit/cubit.dart';
+import '../../../Shared/Cubit/states.dart';
 import 'components.dart';
 
 class LoginScreen extends StatelessWidget {
