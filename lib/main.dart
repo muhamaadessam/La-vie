@@ -10,6 +10,7 @@ import 'package:la_vie/presentation/screens/SplashScreen/splash_screen.dart';
 import 'Shared/Cubit/cubit.dart';
 import 'Shared/Cubit/cubit_observer.dart';
 import 'Shared/Cubit/states.dart';
+import 'Shared/Network/Remote/constant.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => PlantsCubit()..getPlantsData(),
         ),
         BlocProvider(
-          create: (BuildContext context) => UserCubit()..getUserData(),
+          create: (BuildContext context) => UserCubit()..getUserData(method: 'me'),
         ),
         BlocProvider(
           create: (BuildContext context) => CartCubit(),
@@ -54,49 +55,31 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocConsumer<AppCubit, AppState>(
         listener: (context, state) => () {},
-        builder: (context, state) => MaterialApp(
-          title: 'La Vie',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            appBarTheme: const AppBarTheme(color: Colors.white),
-            scaffoldBackgroundColor: Colors.white,
-            elevatedButtonTheme: ElevatedButtonThemeData(
-              style: TextButton.styleFrom(
-                textStyle: GoogleFonts.roboto(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-                backgroundColor: const Color.fromRGBO(26, 188, 0, 1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'La Vie',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+
+              appBarTheme: const AppBarTheme(color: Colors.white),
+              scaffoldBackgroundColor: Colors.white,
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                style: TextButton.styleFrom(
+                  textStyle: GoogleFonts.roboto(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                  backgroundColor: const Color.fromRGBO(26, 188, 0, 1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
             ),
-          ),
-          home: const SplashScreen(),
-        ),
+            home: const SplashScreen(),
+          );
+        },
       ),
     );
-    /*return MaterialApp(
-      title: 'La Vie',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(color: Colors.white),
-        scaffoldBackgroundColor: Colors.white,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: TextButton.styleFrom(
-            textStyle: GoogleFonts.roboto(
-              fontSize: 16,
-              color: Colors.white,
-            ),
-            backgroundColor: const Color.fromRGBO(26, 188, 0, 1),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        ),
-      ),
-      home: const LoginScreen(),
-    );*/
   }
 }

@@ -4,6 +4,8 @@ import 'package:la_vie/Models/seedsModel.dart';
 import 'package:la_vie/Shared/Cubit/states.dart';
 import 'package:la_vie/Shared/Network/Remote/constant.dart';
 import 'package:la_vie/Shared/Network/Remote/dio_helper.dart';
+import 'package:la_vie/presentation/screens/Blogs/blogs_screen.dart';
+import 'package:la_vie/presentation/screens/Forum/forum_screen.dart';
 import '../../Models/plantsModel.dart';
 import '../../Models/product_model.dart';
 import '../../Models/toolsModel.dart';
@@ -19,10 +21,10 @@ class AppCubit extends Cubit<AppState> {
   static AppCubit get(context) => BlocProvider.of(context);
   int currentIndex = 2;
   List<Widget> screens = [
-    const HomeScreen(),
+    const BlogsScreen(),
     const QRCodeScreen(),
     const HomeScreen(),
-    const NotificationsScreen(),
+    const ForumScreen(),
     const ProfileScreen(),
   ];
 
@@ -49,7 +51,7 @@ class SeedsCubit extends Cubit<SeedsStates> {
       emit(SeedsSuccessState());
     }).catchError((error) {
       emit(SeedsErrorState());
-      print('error seeds: ${error.toString()}');
+      print('Seeds error: ${error.toString()}');
     });
   }
 }
@@ -67,11 +69,11 @@ class PlantsCubit extends Cubit<PlantsStates> {
       method: '',
     ).then((value) {
       plantsModel = PlantsModel.fromJson(value.data);
-      print('seeds Data : ${plantsModel!.data![1].description}');
+      print('Plant Data : ${plantsModel!.data![1].description}');
       emit(PlantsSuccessState());
     }).catchError((error) {
       emit(PlantsErrorState());
-      print('error seeds: ${error.toString()}');
+      print('Plant error: ${error.toString()}');
     });
   }
 }
@@ -89,11 +91,11 @@ class ToolsCubit extends Cubit<ToolsStates> {
       method: '',
     ).then((value) {
       toolsModel = ToolsModel.fromJson(value.data);
-      print('seeds Data : ${toolsModel!.data![1].description}');
+      print('Toolss Data : ${toolsModel!.data![1].description}');
       emit(ToolsSuccessState());
     }).catchError((error) {
       emit(ToolsErrorState());
-      print('error seeds: ${error.toString()}');
+      print('Tools error: ${error.toString()}');
     });
   }
 }
@@ -111,11 +113,11 @@ class ProductsCubit extends Cubit<ProductsStates> {
       method: '',
     ).then((value) {
       productsModel = ProductsModel.fromJson(value.data);
-      print('seeds Data : ${productsModel!.data![1].description}');
+      print('Product Data : ${productsModel!.data![1].description}');
       emit(ProductsSuccessState());
     }).catchError((error) {
       emit(ProductsErrorState());
-      print('error seeds: ${error.toString()}');
+      print('Product error : ${error.toString()}');
     });
   }
 }
@@ -150,11 +152,11 @@ class UserCubit extends Cubit<UserStates> {
       method: method,
     ).then((value) {
       userModel = UserModel.fromJson(value.data);
-      //print('seeds Data : ${userModel!.data!.userId}');
+      print('Cart Data : ${userModel!.data!.userId}');
       emit(UserSuccessState());
     }).catchError((error) {
       emit(UserErrorState());
-      print('error seeds: ${error.toString()}');
+      print('Cart error : ${error.toString()}');
     });
   }
 

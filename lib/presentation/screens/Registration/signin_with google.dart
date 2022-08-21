@@ -43,12 +43,12 @@ class SignInWithGoogle extends StatefulWidget {
 class _SignInWithGoogleState extends State<SignInWithGoogle> {
   bool _isLoggedIn = false;
   GoogleSignInAccount? _userObj;
-  GoogleSignIn? _googleSignIn = GoogleSignIn();
+  final GoogleSignIn? _googleSignIn = GoogleSignIn();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Codesundar")),
+      appBar: AppBar(title: Text("Codesundar",style: textStyle(color: Colors.black),)),
       body: Container(
         child: _isLoggedIn
             ? Column(
@@ -73,14 +73,14 @@ class _SignInWithGoogleState extends State<SignInWithGoogle> {
             onPressed: () {
               _googleSignIn?.signIn().then((userData) {
                 setState(() {
+                  print('ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss');
                   _isLoggedIn = true;
                   _userObj = userData!;
                 });
-                print('ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss');
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomeScreen()));
 
               }).catchError((e) {
-                print('Errrrrrrrrror: $e');
+                print('Errrrrrrrrror: ${e.toString()}');
               });
             },
           ),

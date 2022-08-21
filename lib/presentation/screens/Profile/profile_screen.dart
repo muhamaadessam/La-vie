@@ -16,7 +16,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserCubit user = UserCubit.get(context);
-    user.getUserData(method: 'me');
+    //user.getUserData(method: 'me');
     //user.patchUserData(method: USER, email: 'email', firstName: 'll', lastName: 'ss', address: 'sssss');
     print(user.userModel!.data!.email);
     var formKey = GlobalKey<FormState>();

@@ -7,13 +7,16 @@ class CustomTextFormField extends StatelessWidget {
   final FormFieldValidator<String>? validation;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
+  final int? maxLine;
 
   CustomTextFormField({
     Key? key,
     required this.title,
     required this.isPassword,
     required this.controller,
-    required this.validation, this.keyboardType,
+    required this.validation,
+    this.maxLine = 1,
+    this.keyboardType,
   });
 
   @override
@@ -29,13 +32,14 @@ class CustomTextFormField extends StatelessWidget {
           ),
         ),
         const SizedBox(
-          height: 8,
+          height: 4,
         ),
         TextFormField(
-          keyboardType:keyboardType,
+          keyboardType: keyboardType,
           validator: validation,
           controller: controller,
           obscureText: isPassword!,
+          maxLines: maxLine,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),

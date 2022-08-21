@@ -6,7 +6,6 @@ import 'package:la_vie/presentation/Components/navigation_bar.dart';
 import 'package:la_vie/presentation/screens/Registration/registrationBackground.dart';
 import 'package:la_vie/presentation/screens/Registration/sign_up.dart';
 import 'package:la_vie/presentation/screens/Registration/signin_with%20google.dart';
-
 import '../../../Shared/Cubit/cubit.dart';
 import '../../../Shared/Cubit/states.dart';
 
@@ -14,9 +13,6 @@ import 'loginScreen.dart';
 
 class RegistrationScreen extends StatelessWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
-
-  // TextEditingController emailController = TextEditingController();
-  //TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +28,15 @@ class RegistrationScreen extends StatelessWidget {
                 length: 2,
                 child: Column(
                   children: [
-                    const SizedBox(
-                      height: 128,
-                    ),
+                    const Spacer(),
+                    const Spacer(),
                     SizedBox(
                       height: 50,
                       child: Image.asset(
-                        'assets/images/la_vie_logo.png',
+                        'assets/images/Logo.png',
                       ),
                     ),
-                    const SizedBox(
-                      height: 64,
-                    ),
+                    const Spacer(),
                     TabBar(
                       indicatorSize: TabBarIndicatorSize.label,
                       indicatorColor: primaryColor,
@@ -65,27 +58,22 @@ class RegistrationScreen extends StatelessWidget {
                         ),
                         Text(
                           "Login",
-                          /*style: GoogleFonts.roboto(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: const Color.fromRGBO(26, 188, 0, 1,),),*/
                         ),
                       ],
                     ),
-                    SingleChildScrollView(
-                      child: SizedBox(
-                        height: 400,
-                        child: TabBarView(
-                          physics: const BouncingScrollPhysics(),
-                          children: [
-                            SignUpScreen(),
-                            LoginScreen(),
-                          ],
-                        ),
+                    Expanded(
+                      flex: 8,
+                      child: TabBarView(
+                        physics: const BouncingScrollPhysics(),
+                        viewportFraction: 1,
+                        children: [
+                          SignUpScreen(),
+                          LoginScreen(),
+                        ],
                       ),
                     ),
                     const SizedBox(
-                      height: 32,
+                      height: 8,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -114,8 +102,9 @@ class RegistrationScreen extends StatelessWidget {
                         )),
                       ],
                     ),
+                    // const Spacer(),
                     const SizedBox(
-                      height: 24,
+                      height: 8,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -141,7 +130,8 @@ class RegistrationScreen extends StatelessWidget {
                           },
                         ),
                       ],
-                    )
+                    ),
+                    const Spacer(),
                   ],
                 ),
               ),

@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:la_vie/Shared/Network/Remote/constant.dart';
-import 'package:la_vie/presentation/Components/navigation_bar.dart';
 import 'package:la_vie/presentation/screens/Registration/cubit/states.dart';
-import '../../../Shared/Cubit/cubit.dart';
-import '../../../Shared/Cubit/states.dart';
-import '../../../Shared/Network/Remote/dio_helper.dart';
 import 'components.dart';
 import 'cubit/cubit.dart';
 
@@ -35,35 +30,43 @@ class SignUpScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     const SizedBox(
-                      height: 24,
-                    ),
-                    CustomTextFormField(
-                      title: 'First Name',
-                      isPassword: false,
-                      controller: firstNameController,
-                      validation: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
                       height: 16,
                     ),
-                    CustomTextFormField(
-                      title: 'Last Name',
-                      isPassword: false,
-                      controller: lastNameController,
-                      validation: (String? value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        return null;
-                      },
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CustomTextFormField(
+                            title: 'First Name',
+                            isPassword: false,
+                            controller: firstNameController,
+                            validation: (String? value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter your email';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        Expanded(
+                          child: CustomTextFormField(
+                            title: 'Last Name',
+                            isPassword: false,
+                            controller: lastNameController,
+                            validation: (String? value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter your email';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
-                      height: 16,
+                      height: 8,
                     ),
                     CustomTextFormField(
                       title: 'E-mail',
@@ -77,7 +80,7 @@ class SignUpScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(
-                      height: 16,
+                      height: 8,
                     ),
                     CustomTextFormField(
                       title: 'Password',
@@ -91,7 +94,7 @@ class SignUpScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(
-                      height: 16,
+                      height: 8,
                     ),
                     CustomTextFormField(
                       title: 'Confirm Password',
@@ -105,14 +108,14 @@ class SignUpScreen extends StatelessWidget {
                       },
                     ),
                     const SizedBox(
-                      height: 64,
+                      height: 32,
                     ),
                     state is LoginLoadingState
                         ? const Center(child: CircularProgressIndicator())
                         : ElevatedButton(
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-                                SignUpCubit.get(context).userSignUp(
+                                SignUpCubit.get(context).userSignUp(context,
                                     firstName: firstNameController!.text,
                                     lastName: lastNameController!.text,
                                     email: emailController!.text,

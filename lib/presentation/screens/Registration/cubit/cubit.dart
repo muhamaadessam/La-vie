@@ -32,10 +32,12 @@ class SignInCubit extends Cubit<SignInStates> {
     ).then((value) {
       signInModel = SignInModel.fromJson(value.data);
       print(signInModel.data!.accessToken!.toString());
-      print(signInModel.data!.refreshToken!.toString());
-      CashHelper.put(key: 'accessToken', value: signInModel.data!.accessToken!.toString());
-      CashHelper.put(key: 'refreshToken', value: signInModel.data!.refreshToken!.toString());
-
+      CashHelper.put(
+          key: 'accessToken', value: signInModel.data!.accessToken!.toString());
+      CashHelper.put(
+          key: 'refreshToken',
+          value: signInModel.data!.refreshToken!.toString());
+      ACCESS_TOKEN = signInModel.data!.accessToken!.toString();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -46,7 +48,7 @@ class SignInCubit extends Cubit<SignInStates> {
     }).catchError(
       (error) {
         emit(LoginErrorState());
-        print('error : ${error.toString()}');
+        print('SignIn error : ${error.toString()}');
       },
     );
   }
@@ -58,7 +60,8 @@ class SignUpCubit extends Cubit<SignUpStates> {
   static SignUpCubit get(context) => BlocProvider.of(context);
   SignUpModel signUpModel = SignUpModel();
 
-  void userSignUp({
+  void userSignUp(
+    context, {
     required String firstName,
     required String lastName,
     required String email,
@@ -77,13 +80,17 @@ class SignUpCubit extends Cubit<SignUpStates> {
     ).then((value) {
       //print(value.data);
       signUpModel = SignUpModel.fromJson(value.data);
-      print(signUpModel.user);
-      print(signUpModel.type);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const BottomBar(),
+        ),
+      );
       emit(SignUpSuccessState());
     }).catchError(
       (error) {
         emit(SignUpErrorState());
-        print('error : $error');
+        print('SignUP error : $error');
       },
     );
   }

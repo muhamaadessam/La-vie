@@ -5,8 +5,6 @@ import 'package:la_vie/presentation/screens/Registration/cubit/states.dart';
 import 'components.dart';
 
 class LoginScreen extends StatelessWidget {
-  LoginScreen({Key? key}) : super(key: key);
-
   TextEditingController? emailController = TextEditingController();
   TextEditingController? passwordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
@@ -61,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                     state is LoginLoadingState
                         ? const Center(child: CircularProgressIndicator())
                         : ElevatedButton(
-                            onPressed: (){
+                            onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 SignInCubit.get(context).userSignIn(context,
                                     email: emailController!.text,
