@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:la_vie/Shared/Cubit/cubit.dart';
 
 import '../../../Shared/Constant/images.dart';
-import '../../../Shared/Cubit/states.dart';
 import '../Registration/components.dart';
 
 Widget customCardForProfile({String? text, VoidCallback? onTap}) {
@@ -45,10 +45,15 @@ Widget customCardForProfile({String? text, VoidCallback? onTap}) {
   );
 }
 
-void customAlertDialog(BuildContext context,
+
+void changeEmailAlertDialog(BuildContext context,
     {required String? title,
+    required UserCubit user,
+    required String? address,
+    required String? firstName,
+    required String? lastName,
     required GlobalKey<FormState> formKey,
-    required TextEditingController controller,
+    required TextEditingController emailController,
     required bool loading}) {
   showDialog(
       context: context,
@@ -65,7 +70,7 @@ void customAlertDialog(BuildContext context,
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Text('Change $title'),
+                  const Text('Change Email'),
                   const SizedBox(
                     height: 16,
                   ),
@@ -74,14 +79,15 @@ void customAlertDialog(BuildContext context,
                     children: [
                       CustomTextFormField(
                         isPassword: false,
-                        controller: controller,
+                        controller: emailController,
                         validation: (String? value) {
                           if (value!.isEmpty) {
-                            return 'Please enter your $title';
+                            return 'Please enter your Email';
                           }
                           return null;
                         },
-                        title: 'New $title',
+                        keyboardType: TextInputType.emailAddress,
+                        title: 'New Email',
                       ),
                     ],
                   ),
@@ -90,19 +96,98 @@ void customAlertDialog(BuildContext context,
             ),
           ),
           actions: [
-           loading
+            loading
                 ? const Center(child: CircularProgressIndicator())
                 : ElevatedButton(
                     onPressed: () {
-                      /*if (formKey.currentState!
-                                                .validate()) {
-                                              user.patchUserData(
-                                                  firstName: textEditingController.text,
-                                                  lastName: '',
-                                                  address: user.userModel!.data!.address,
-                                                  email: user.userModel!.data!.email,
-                                                  method: 'me');
-                                            }*/
+                      if (formKey.currentState!.validate()) {
+                        user.patchUserData(
+                            email: emailController.text,
+                            firstName: firstName,
+                            lastName: lastName,
+                            address: address);
+                      }
+                      user.getUserData();
+                      debugPrint('Email ${emailController.text}');
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Change')),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cansel'),
+            ),
+          ],
+        );
+      });
+}
+
+void changeNameAlertDialog(BuildContext context,
+    {required String? title,
+    required UserCubit user,
+    required String? address,
+    required String? email,
+    required GlobalKey<FormState> formKey,
+    required TextEditingController nameController,
+    required bool loading}) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15.0),
+            ),
+          ),
+          content: Form(
+            key: formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const Text('Change Name'),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CustomTextFormField(
+                        isPassword: false,
+                        controller:
+                             nameController ,
+                        validation: (String? value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your Name';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.text,
+                        title: 'New Name',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            loading
+                ? const Center(child: CircularProgressIndicator())
+                : ElevatedButton(
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        var name = nameController.text.split(' ');
+                        user.patchUserData(
+                            email: email,
+                            firstName: name[0],
+                            lastName: name[1],
+                            address: address);
+                        user.getUserData();
+                        debugPrint('Name $name');
+                        Navigator.pop(context);
+                      }
                     },
                     child: const Text('Change')),
             ElevatedButton(

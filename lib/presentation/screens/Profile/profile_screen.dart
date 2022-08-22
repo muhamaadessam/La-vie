@@ -5,10 +5,11 @@ import 'package:la_vie/Shared/Constant/images.dart';
 import 'package:la_vie/Shared/Constant/text.dart';
 import 'package:la_vie/Shared/Cubit/cubit.dart';
 import 'package:la_vie/Shared/Cubit/states.dart';
-import 'package:la_vie/Shared/Network/Remote/constant.dart';
+import 'package:la_vie/presentation/screens/Exam/qustion_screen.dart';
 import 'package:la_vie/presentation/screens/Profile/background_profile.dart';
 import 'package:la_vie/presentation/screens/Profile/components.dart';
-import 'package:la_vie/presentation/screens/Registration/registrationScreen.dart';
+
+import '../Registration/registrationScreen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -16,50 +17,45 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserCubit user = UserCubit.get(context);
-    print(user.userModel!.data!.email);
     var formKey = GlobalKey<FormState>();
-    TextEditingController textEditingController = TextEditingController();
+    TextEditingController nameController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
     return BlocConsumer<UserCubit, UserStates>(
       listener: (context, state) => () {},
-      builder: (context, state) => user.userModel!.data == null
-          ? const CircularProgressIndicator()
-          : Scaffold(
-              extendBody: true,
-              extendBodyBehindAppBar: true,
-              appBar: AppBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegistrationScreen()));
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                ),
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      user.patchUserData(
-                          method: USER,
-                          email: 'email',
-                          firstName: 'll',
-                          lastName: 'ss',
-                          address: 'sssss');
-                      //Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.more_horiz,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+      builder: (context, state) => Scaffold(
+        extendBody: true,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const RegistrationScreen()));
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const QuestionScreen()));
+              },
+              icon: const Icon(
+                Icons.more_horiz,
+                color: Colors.white,
               ),
-              body: BackgroundProfile(
+            ),
+          ],
+        ),
+        body: state is UserLoadingState || user.userModel == null
+            ? const Center(child: CircularProgressIndicator())
+            : BackgroundProfile(
                 children: SingleChildScrollView(
                   child: Column(
                     // mainAxisAlignment: MainAxisAlignment.end,
@@ -141,12 +137,15 @@ class ProfileScreen extends StatelessWidget {
                               customCardForProfile(
                                   text: 'Name',
                                   onTap: () {
-                                    customAlertDialog(
+                                    changeNameAlertDialog(
                                       context,
                                       title: 'Name',
                                       formKey: formKey,
-                                      controller: textEditingController,
                                       loading: state is UserLoadingState,
+                                      email: user.userModel!.data!.email,
+                                      address: user.userModel!.data!.address,
+                                      user: user,
+                                      nameController: nameController,
                                     );
                                   }),
                               const SizedBox(
@@ -155,12 +154,16 @@ class ProfileScreen extends StatelessWidget {
                               customCardForProfile(
                                   text: 'Email',
                                   onTap: () {
-                                    customAlertDialog(
+                                    changeEmailAlertDialog(
                                       context,
                                       title: 'Email',
                                       formKey: formKey,
-                                      controller: textEditingController,
                                       loading: state is UserLoadingState,
+                                      emailController: emailController,
+                                      address: user.userModel!.data!.address,
+                                      user: user,
+                                      lastName: user.userModel!.data!.lastName,
+                                      firstName: user.userModel!.data!.lastName,
                                     );
                                   }),
                               const SizedBox(
@@ -174,7 +177,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
+      ),
     );
   }
 }

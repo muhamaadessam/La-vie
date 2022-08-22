@@ -30,7 +30,7 @@ class Data {
   String? imageUrl;
   String? address;
   String? userPoints;
-  List<String>? userNotification;
+  List<UserNotification>? userNotification;
 
   Data(
       {this.userId,
@@ -50,7 +50,12 @@ class Data {
     imageUrl = json['imageUrl'];
     address = json['address'];
     userPoints = json['UserPoints'];
-    userNotification = json['UserNotification'].cast<String>();
+    if (json['UserNotification'] != null) {
+      userNotification = <UserNotification>[];
+      json['UserNotification'].forEach((v) {
+        userNotification!.add(UserNotification.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -62,7 +67,44 @@ class Data {
     data['imageUrl'] = imageUrl;
     data['address'] = address;
     data['UserPoints'] = userPoints;
-    data['UserNotification'] = userNotification;
+    if (userNotification != null) {
+      data['UserNotification'] =
+          userNotification!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+
+}
+
+class UserNotification {
+  String? notificationId;
+  String? userId;
+  String? imageUrl;
+  String? message;
+  String? createdAt;
+
+  UserNotification(
+      {this.notificationId,
+        this.userId,
+        this.imageUrl,
+        this.message,
+        this.createdAt});
+
+  UserNotification.fromJson(Map<String, dynamic> json) {
+    notificationId = json['notificationId'];
+    userId = json['userId'];
+    message = json['message'];
+    imageUrl = 'https://lavie.orangedigitalcenteregypt.com${json['imageUrl']}';
+    createdAt = json['createdAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['notificationId'] = notificationId;
+    data['userId'] = userId;
+    data['imageUrl'] = imageUrl;
+    data['message'] = message;
+    data['createdAt'] = createdAt;
     return data;
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:la_vie/Shared/Cubit/cubit.dart';
 import 'package:la_vie/Shared/Cubit/states.dart';
 import 'package:la_vie/Shared/Network/Local/cash_helper.dart';
+import 'package:la_vie/presentation/screens/Forum/forum_screen.dart';
 
 import '../../../Shared/Constant/colors.dart';
 import '../Exam/qustion_screen.dart';
@@ -52,7 +53,7 @@ class SearchBar extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const QuestionScreen(),
+                                builder: (context) => const ForumScreen(),
                               ),
                             );
                           },

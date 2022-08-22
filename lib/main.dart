@@ -57,6 +57,9 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => MyForumsCubit()..getMyForumsData(),
         ),
         BlocProvider(
+          create: (BuildContext context) => BlogsCubit()..getBlogsData()..allBlogs,
+        ),
+        BlocProvider(
           create: (BuildContext context) => HomeTapsCubit(),
         ),
       ],

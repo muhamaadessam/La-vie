@@ -4,7 +4,15 @@ import 'package:la_vie/Shared/Constant/images.dart';
 import 'package:la_vie/Shared/Constant/text.dart';
 
 class BlogsCard extends StatelessWidget {
-  const BlogsCard({Key? key}) : super(key: key);
+  const BlogsCard(
+      {Key? key,
+      required this.title,
+      required this.description,
+      required this.imageUrl})
+      : super(key: key);
+  final String? title;
+  final String? description;
+  final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +30,16 @@ class BlogsCard extends StatelessWidget {
                 width: 150,
                 height: 130,
                 decoration: BoxDecoration(
+                  color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(10),
                 ),
                 clipBehavior: Clip.antiAlias,
-                child: Image(
-                  image: AssetImage(
-                    '${imageAsset}product.png',
-                  ),
+                child: imageUrl != 'https://lavie.orangedigitalcenteregypt.com'
+                    ? Image(
+                        image: NetworkImage(imageUrl!),
                   fit: BoxFit.cover,
-                ),
+                      )
+                    : Image.asset('${imageAsset}product_image.png' ,fit: BoxFit.cover,),
               ),
             ),
             Expanded(
@@ -56,7 +65,7 @@ class BlogsCard extends StatelessWidget {
                       height: 12,
                     ),
                     Text(
-                      '5 Tips to treat plants ',
+                      title!,
                       style: textStyle(
                           color: Colors.black,
                           weight: FontWeight.w600,
@@ -66,7 +75,7 @@ class BlogsCard extends StatelessWidget {
                       height: 4,
                     ),
                     Text(
-                      'leaf, in botany, any usually leaf, in botany, any usually leaf, in botany, any usually leaf, in botany, any usually leaf, in botany, any usually leaf, in botany, any usually leaf, in botany, any usually leaf, in botany, any usually ',
+                      description!,
                       style: textStyle(
                           color: const Color.fromRGBO(125, 123, 123, .78),
                           weight: FontWeight.w400,

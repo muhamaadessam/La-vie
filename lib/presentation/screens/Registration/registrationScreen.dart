@@ -94,12 +94,13 @@ class RegistrationScreen extends StatelessWidget {
                           ),
                         ),
                         const Expanded(
-                            child: Divider(
-                          indent: 8,
-                          endIndent: 8,
-                          thickness: 1,
-                          color: Color.fromRGBO(151, 151, 151, 1),
-                        )),
+                          child: Divider(
+                            indent: 8,
+                            endIndent: 8,
+                            thickness: 1,
+                            color: Color.fromRGBO(151, 151, 151, 1),
+                          ),
+                        ),
                       ],
                     ),
                     // const Spacer(),

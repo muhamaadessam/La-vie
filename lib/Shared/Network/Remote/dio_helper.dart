@@ -34,14 +34,13 @@ class DioHelper {
   static Future<Response> patchData({
     required String? endPoint,
     required String? method,
-    String? refreshToken,
     required dynamic data,
   }) async {
     dio!.options.headers = {
       "Content-type": "application/json",
       'Authorization': 'Bearer ${CashHelper.get(key: 'accessToken')}',
     };
-    return await dio!.put(
+    return await dio!.patch(
       '$endPoint$method',
       data: data,
     );

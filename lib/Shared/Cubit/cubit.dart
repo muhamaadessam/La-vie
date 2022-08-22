@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:la_vie/Models/blogs_model.dart';
 import 'package:la_vie/Models/forums_model.dart';
 import 'package:la_vie/Models/seedsModel.dart';
 import 'package:la_vie/Shared/Cubit/states.dart';
@@ -8,6 +9,7 @@ import 'package:la_vie/Shared/Network/Remote/constant.dart';
 import 'package:la_vie/Shared/Network/Remote/dio_helper.dart';
 import 'package:la_vie/presentation/screens/Blogs/blogs_screen.dart';
 import 'package:la_vie/presentation/screens/Forum/forum_screen.dart';
+import 'package:la_vie/presentation/screens/NotificationScreens/notifications.dart';
 import '../../Models/plantsModel.dart';
 import '../../Models/product_model.dart';
 import '../../Models/toolsModel.dart';
@@ -32,7 +34,7 @@ class AppCubit extends Cubit<AppState> {
     const BlogsScreen(),
     const QRCodeScreen(),
     const HomeScreen(),
-    const ForumScreen(),
+    const NotificationsScreen(),
     const ProfileScreen(),
   ];
 
@@ -308,38 +310,36 @@ class UserCubit extends Cubit<UserStates> {
       method: method,
     ).then((value) {
       userModel = UserModel.fromJson(value.data);
-      print('Cart Data : ${userModel!.data!.userId}');
+      print('User email : ${userModel!.data!.email}');
       emit(UserSuccessState());
     }).catchError((error) {
       emit(UserErrorState());
-      print('Cart error : ${error.toString()}');
+      print('User error : ${error.toString()}');
     });
   }
 
   void patchUserData({
-    required String? method,
     required String? email,
     required String? firstName,
     required String? lastName,
     required String? address,
   }) {
     emit(UserLoadingState());
-    DioHelper.postData(
+    DioHelper.patchData(
       endPoint: USER,
-      method: method,
+      method: 'me',
       data: {
-        {
-          "firstName": firstName,
-          "lastName": lastName,
-          "email": lastName,
-          "address": address
-        }
+        "firstName": firstName,
+        "lastName": lastName,
+        "email": email,
+        "address": address
       },
     ).then((value) {
+      getUserData(method: 'me');
       emit(UserSuccessState());
     }).catchError((error) {
       emit(UserErrorState());
-      print('error seeds: ${error.toString()}');
+      print('error user: ${error.toString()}');
     });
   }
 }
@@ -350,15 +350,20 @@ class BlogsCubit extends Cubit<BlogsStates> {
   static BlogsCubit get(context) => BlocProvider.of(context);
 
   //PlantsModel? plantsModel;
+  BlogsModel? blogsModel;
+  List<dynamic>? allBlogs;
 
   void getBlogsData() {
     emit(BlogsLoadingState());
     DioHelper.getData(
-      endPoint: plants,
-      method: '',
+      endPoint: products,
+      method: '/blogs',
     ).then((value) {
-      //plantsModel = PlantsModel.fromJson(value.data);
-      // print('Blogs Data : ${plantsModel!.data![1].description}');
+      blogsModel = BlogsModel.fromJson(value.data);
+      allBlogs = List.from(blogsModel!.data!.tools!)
+        ..addAll(blogsModel!.data!.seeds!)
+        ..addAll(blogsModel!.data!.plants!);
+      print('Blogs Data : ${blogsModel!.data!.tools![1].name}');
       emit(BlogsSuccessState());
     }).catchError((error) {
       emit(BlogsErrorState());

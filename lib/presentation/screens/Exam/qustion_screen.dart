@@ -139,41 +139,46 @@ class _QuestionScreenState extends State<QuestionScreen> {
             Row(
               children: [
                 questionNumber == 1
-                    ? Container()
-                    : ElevatedButton(
-                        style: TextButton.styleFrom(
-                          side: BorderSide(
-                            color: primaryColor,
-                          ),
-                          backgroundColor: Colors.white,
-                        ),
-                        onPressed: () {
-                          if (1 < questionNumber && questionNumber <= 10) {
-                            setState(() {
-                              questionNumber--;
-                            });
-                          }
-                        },
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: Center(
-                            child: Text(
-                              'Back',
-                              style: textStyle(color: primaryColor, size: 16),
+                    ? Expanded(flex: 4,child: Container(),)
+                    : Expanded(flex: 4,
+                      child: ElevatedButton(
+                          style: TextButton.styleFrom(
+                            side: BorderSide(
+                              color: primaryColor,
                             ),
+                            backgroundColor: Colors.white,
                           ),
-                        )),
-                const Expanded(child: SizedBox()),
-                ElevatedButton(
-                  onPressed: () {
-                    if (questionNumber < 10) questionNumber++;
-                    setState(() {});
-                  },
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: Center(
-                      child: Text(
-                        questionNumber != 10 ? 'Next' : 'Finish',
+                          onPressed: () {
+                            if (1 < questionNumber && questionNumber <= 10) {
+                              setState(() {
+                                questionNumber--;
+                              });
+                            }
+                          },
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: Center(
+                              child: Text(
+                                'Back',
+                                style: textStyle(color: primaryColor, size: 16),
+                              ),
+                            ),
+                          )),
+                    ),
+                const Expanded(flex:1,child: SizedBox()),
+                Expanded(flex: 4,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (questionNumber < 10) questionNumber++;
+                      if (questionNumber == 10) Navigator.pop(context);
+                      setState(() {});
+                    },
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Center(
+                        child: Text(
+                          questionNumber != 10 ? 'Next' : 'Finish',
+                        ),
                       ),
                     ),
                   ),

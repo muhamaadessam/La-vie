@@ -20,22 +20,20 @@ class ForumScreen extends StatelessWidget {
     forums.getForumsData();
     myForums.getMyForumsData();
     return Scaffold(
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 80.0),
-        child: FloatingActionButton(
-          onPressed: () {
-            print('image Url Null:${forums.forumsModel!.data![5].imageUrl}');
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const CreatePost(),
-              ),
-            );
-          },
-          backgroundColor: primaryColor,
-          foregroundColor: Colors.white,
-          child: const Icon(Icons.add),
-        ),
+      //padding bottom 80 if have bottom navigation bar
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print('image Url Null:${forums.forumsModel!.data![5].imageUrl}');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CreatePost(),
+            ),
+          );
+        },
+        backgroundColor: primaryColor,
+        foregroundColor: Colors.white,
+        child: const Icon(Icons.add),
       ),
       appBar: AppBar(
         elevation: 0,
