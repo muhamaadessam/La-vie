@@ -19,45 +19,46 @@ class ForumScreen extends StatelessWidget {
     MyForumsCubit myForums = MyForumsCubit.get(context);
     forums.getForumsData();
     myForums.getMyForumsData();
-    return Scaffold(
-      //padding bottom 80 if have bottom navigation bar
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('image Url Null:${forums.forumsModel!.data![5].imageUrl}');
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CreatePost(),
-            ),
-          );
-        },
-        backgroundColor: primaryColor,
-        foregroundColor: Colors.white,
-        child: const Icon(Icons.add),
-      ),
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          'Discussion Forums',
-          style:
-              textStyle(color: Colors.black, weight: FontWeight.w700, size: 21),
-        ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-        ),
-      ),
-      body: BlocConsumer<MyForumsCubit, MyForumsStates>(
+    //forums.getSearch('');
+    return BlocConsumer<MyForumsCubit, MyForumsStates>(
+      listener: (context, state) => () {},
+      builder: (context, state) => BlocConsumer<ForumsCubit, ForumsStates>(
         listener: (context, state) => () {},
-        builder: (context, state) => BlocConsumer<ForumsCubit, ForumsStates>(
-          listener: (context, state) => () {},
-          builder: (context, state) => SingleChildScrollView(
+        builder: (context, state) => Scaffold(
+          //padding bottom 80 if have bottom navigation bar
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              //print('image Url Null:${forums.forumsModel!.data![5].imageUrl}');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CreatePost(),
+                ),
+              );
+            },
+            backgroundColor: primaryColor,
+            foregroundColor: Colors.white,
+            child: const Icon(Icons.add),
+          ),
+          appBar: AppBar(
+            elevation: 0,
+            centerTitle: true,
+            title: Text(
+              'Discussion Forums',
+              style: textStyle(
+                  color: Colors.black, weight: FontWeight.w700, size: 21),
+            ),
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          body: SingleChildScrollView(
             controller: singleScrollController,
             physics: const BouncingScrollPhysics(),
             child: Column(
@@ -111,8 +112,10 @@ class ForumScreen extends StatelessWidget {
                       const SizedBox(
                         height: 16,
                       ),
-                      state is ForumsLoadingState ||
-                              state is MyForumsLoadingState
+                      state is ForumsLoadingState &&
+                              state is MyForumsLoadingState &&
+                              forums.forumsModel!.data == null &&
+                              myForums.forumsModel!.data == null
                           ? const Center(child: CircularProgressIndicator())
                           : SizedBox(
                               width: double.infinity,
@@ -122,39 +125,27 @@ class ForumScreen extends StatelessWidget {
                                   itemBuilder: (context, index) {
                                     if (forums.forumsModel!.data!.isNotEmpty) {
                                       return Post(
-                                        title:
-                                            '${forums.forumsModel!.data![index].title}',
-                                        imageUrl: forums
-                                            .forumsModel!.data![index].imageUrl,
-                                        description: forums.forumsModel!
-                                            .data![index].description,
-                                        forumComments: forums.forumsModel!
-                                            .data![index].forumComments!.length,
-                                        forumLikes: forums.forumsModel!
-                                            .data![index].forumLikes!.length,
+                                        index: index,
+                                        forumsCubit: forums,
+                                        forumsModel: forums.forumsModel!,
                                       );
-                                    } else if (myForums.forumsModel!.data!.isNotEmpty) {
+                                    } else if (myForums
+                                        .forumsModel!.data!.isNotEmpty) {
                                       return Post(
-                                        title:
-                                            '${myForums.forumsModel!.data![index].title}',
-                                        imageUrl: myForums
-                                            .forumsModel!.data![index].imageUrl,
-                                        description: myForums.forumsModel!
-                                            .data![index].description,
-                                        forumComments: myForums.forumsModel!
-                                            .data![index].forumComments!.length,
-                                        forumLikes: myForums.forumsModel!
-                                            .data![index].forumLikes!.length,
+                                        myForumsCubit: myForums,
+                                        index: index,
+                                        forumsModel: myForums.forumsModel!,
                                       );
                                     } else {
-                                      return  Container();
+                                      return Container();
                                     }
                                   },
                                   separatorBuilder: (context, index) =>
                                       const SizedBox(
                                         height: 16,
                                       ),
-                                  itemCount: forums.forumsModel!.data!.length),
+                                  itemCount:
+                                      myForums.forumsModel!.data!.length),
                             ),
                     ],
                   ),

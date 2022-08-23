@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:la_vie/Shared/Constant/colors.dart';
 import 'package:la_vie/Shared/Cubit/cubit.dart';
 import 'package:la_vie/Shared/Cubit/states.dart';
+import 'package:la_vie/presentation/screens/Forum/forum_screen.dart';
 import 'package:la_vie/presentation/screens/HomeScreen/components.dart';
 import 'package:la_vie/presentation/screens/HomeScreen/product_card.dart';
 import 'package:la_vie/presentation/screens/HomeScreen/search_bar.dart';
@@ -34,8 +35,19 @@ class HomeScreen extends StatelessWidget {
               appBar: AppBar(
                 centerTitle: true,
                 backgroundColor: Colors.white,
-                //leading: Container(),
-                leadingWidth: 0,
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.social_distance_rounded,
+                    color: primaryColor,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ForumScreen()));
+                  },
+                ),
+                //leadingWidth: 0,
                 elevation: 0,
                 title: SizedBox(
                   height: 45,

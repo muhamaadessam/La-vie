@@ -1,29 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:la_vie/Models/forums_model.dart';
 import 'package:la_vie/Shared/Constant/colors.dart';
 import 'package:la_vie/Shared/Constant/images.dart';
 import 'package:la_vie/Shared/Constant/text.dart';
+import 'package:la_vie/Shared/Cubit/cubit.dart';
 
 class Post extends StatelessWidget {
-  const Post(
-      {Key? key,
-      this.title,
-      this.description,
-      this.imageUrl,
-      this.forumLikes,
-      this.forumComments})
-      : super(key: key);
-  final String? title;
-  final String? description;
-  final String? imageUrl;
-  final int? forumLikes;
-  final int? forumComments;
+  const Post({
+    Key? key,
+    required this.forumsModel,
+    required this.index,
+    this.forumsCubit,
+    this.myForumsCubit,
+  }) : super(key: key);
+
+  final ForumsModel forumsModel;
+  final ForumsCubit? forumsCubit;
+  final MyForumsCubit? myForumsCubit;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
+    ForumsCubit forums = ForumsCubit.get(context);
+    MyForumsCubit myForums = MyForumsCubit.get(context);
     ImageProvider? imageProvider;
-    imageUrl != 'https://lavie.orangedigitalcenteregypt.comnull'
-        ? imageProvider = NetworkImage(imageUrl!)
-        : Image.asset('${imageAsset}product_image.png');
+    forumsModel.data![index].imageUrl !=
+            'https://lavie.orangedigitalcenteregypt.comnull'
+        ? imageProvider = NetworkImage(forumsModel.data![index].imageUrl!)
+        : imageProvider = AssetImage('${imageAsset}profile.png');
     return Column(
       children: [
         Container(
@@ -74,7 +78,7 @@ class Post extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        title!,
+                        forumsModel.data![index].title!,
                         style: textStyle(
                           weight: FontWeight.w700,
                           size: 18,
@@ -82,7 +86,7 @@ class Post extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        description!,
+                        forumsModel.data![index].description!,
                         style: textStyle(
                           weight: FontWeight.w400,
                           size: 15,
@@ -94,10 +98,11 @@ class Post extends StatelessWidget {
                 ),
                 SizedBox(
                   width: double.infinity,
-                  child: imageUrl !=
+                  child: forumsModel.data![index].imageUrl !=
                           'https://lavie.orangedigitalcenteregypt.comnull'
                       ? Image(
-                          image: NetworkImage(imageUrl!),
+                          image:
+                              NetworkImage(forumsModel.data![index].imageUrl!),
                           width: double.infinity,
                         )
                       : Image.asset(
@@ -109,25 +114,33 @@ class Post extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 16.0, left: 16),
                   child: Row(
                     children: [
-                      Row(
-                        children: [
-                          Image.asset(
-                            '${imageAsset}Like.png',
-                            width: 18,
-                          ),
-                          Text(
-                            '  ${forumLikes!} Like',
-                            style: textStyle(
-                              color: const Color.fromRGBO(0, 0, 0, .6),
+                      InkWell(
+                        onTap: () {
+                          myForums.makeLikePost(
+                              forumsModel.data![index].forumId!);
+                          debugPrint(
+                              myForums.forumsModel!.data![index].forumId!);
+                        },
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              '${imageAsset}Like.png',
+                              width: 18,
                             ),
-                          ),
-                        ],
+                            Text(
+                              '  ${forumsModel.data![index].forumLikes!.length} Like',
+                              style: textStyle(
+                                color: const Color.fromRGBO(0, 0, 0, .6),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       const Spacer(
                         flex: 1,
                       ),
                       Text(
-                        '${forumComments!} Replies',
+                        '${forumsModel.data![index].forumComments!.length} Replies',
                         style: textStyle(
                           color: const Color.fromRGBO(0, 00, 0, .6),
                         ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:la_vie/Models/blogs_model.dart';
 import 'package:la_vie/Models/forums_model.dart';
 import 'package:la_vie/Models/seedsModel.dart';
@@ -8,7 +10,6 @@ import 'package:la_vie/Shared/Cubit/states.dart';
 import 'package:la_vie/Shared/Network/Remote/constant.dart';
 import 'package:la_vie/Shared/Network/Remote/dio_helper.dart';
 import 'package:la_vie/presentation/screens/Blogs/blogs_screen.dart';
-import 'package:la_vie/presentation/screens/Forum/forum_screen.dart';
 import 'package:la_vie/presentation/screens/NotificationScreens/notifications.dart';
 import '../../Models/plantsModel.dart';
 import '../../Models/product_model.dart';
@@ -21,7 +22,7 @@ import '../../presentation/screens/QRCodeScreen/qr_code_screen.dart';
 import 'package:la_vie/Models/signup_model.dart';
 import 'package:la_vie/Models/signin_model.dart';
 import 'package:la_vie/Shared/Network/Local/cash_helper.dart';
-
+import 'dart:io';
 import '../Constant/colors.dart';
 import '../Constant/text.dart';
 
@@ -263,6 +264,14 @@ class ProductsCubit extends Cubit<ProductsStates> {
 
   static ProductsCubit get(context) => BlocProvider.of(context);
   ProductsModel? productsModel;
+  List<dynamic>? search = [];
+
+  void getSearch(String? value) {
+    emit(ProductsSearchLoadingState());
+    search = [];
+    search!.add(value);
+    emit(ProductsSearchSuccessState());
+  }
 
   void getProductsData() {
     emit(ProductsLoadingState());
@@ -377,8 +386,107 @@ class ForumsCubit extends Cubit<ForumsStates> {
 
   static ForumsCubit get(context) => BlocProvider.of(context);
 
-  //PlantsModel? plantsModel;
   ForumsModel? forumsModel;
+  List<dynamic>? search = [];
+
+  File? image;
+
+  Future pickImage(ImageSource source) async {
+    try {
+      emit(ForumsAddImagePostLoadingState());
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      debugPrint('image : ${imageTemporary.path}');
+      this.image = imageTemporary;
+      emit(ForumsAddImagePostSuccessState());
+    } on PlatformException catch (e) {
+      debugPrint('failed to pick image : $e');
+      emit(ForumsAddImagePostErrorState());
+    }
+  }
+
+  Future<ImageSource?> showImageSource(context) async {
+    emit(ForumsAddImagePostLoadingState());
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+              leading: Icon(
+                Icons.camera_alt,
+                color: primaryColor,
+              ),
+              title: Text(
+                'Camera',
+                style: textStyle(color: Colors.black),
+              ),
+              onTap: () {
+                pickImage(ImageSource.camera);
+                Navigator.of(context).pop(ImageSource.camera);
+                emit(ForumsAddImagePostSuccessState());
+              }),
+          ListTile(
+            leading: Icon(
+              Icons.image,
+              color: primaryColor,
+            ),
+            title: Text(
+              'Gallery',
+              style: textStyle(color: Colors.black),
+            ),
+            onTap: () {
+              pickImage(ImageSource.gallery);
+              Navigator.of(context).pop(ImageSource.camera);
+              emit(ForumsAddImagePostSuccessState());
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void forumsAddPost({
+     String? title,
+     String? description,
+     String? imageBase64,
+  }) {
+    emit(ForumsAddPostLoadingState());
+    DioHelper.postData(
+      endPoint: forums,
+      method:'',
+      data: {
+        "title": title,
+        "description": description,
+        "imageBase64": imageBase64,
+      },
+    ).then((value) {
+      debugPrint("value : ${value.data}");
+      emit(ForumsAddPostSuccessState());
+    }).catchError(
+      (error) {
+        image = null;
+        emit(ForumsAddPostErrorState());
+        debugPrint('Add Post error : ${error.toString()}');
+      },
+    );
+  }
+
+  void getSearch(String? title) {
+    emit(ForumsSearchLoadingState());
+    //search = [];
+
+    DioHelper.getData(
+            endPoint: forums, method: '/0271f5df-7522-48ee-9157-40fa75bd7c3c')
+        .then((value) {
+      print('Search forumId : ${value.data['data']['forumId']}');
+      emit(ForumsSearchSuccessState());
+    }).onError((error, stackTrace) {
+      debugPrint('Error data: $error');
+      emit(ForumsSearchErrorState());
+    });
+  }
 
   void getForumsData() {
     emit(ForumsLoadingState());
@@ -493,5 +601,10 @@ class MyForumsCubit extends Cubit<MyForumsStates> {
       emit(MyForumsErrorState());
       print('Forums me error: ${error.toString()}');
     });
+  }
+
+  void makeLikePost(String? id) {
+    ///api/v1/forums/{forumId}/like
+    DioHelper.postData(endPoint: forums, method: '/$id/like', data: {});
   }
 }

@@ -16,6 +16,54 @@ class BlogsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return CustomCard(
+      imageUrl: imageUrl!,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '2 days age',
+            style: textStyle(
+              color: primaryColor,
+              weight: FontWeight.w400,
+              size: 13,
+            ),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          Text(
+            title!,
+            style: textStyle(
+                color: Colors.black, weight: FontWeight.w600, size: 17),
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          Text(
+            description!,
+            style: textStyle(
+                color: const Color.fromRGBO(125, 123, 123, .78),
+                weight: FontWeight.w400,
+                size: 13),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CustomCard extends StatelessWidget {
+  const CustomCard({Key? key, required this.child, required this.imageUrl})
+      : super(key: key);
+  final Widget child;
+  final String imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       height: 162,
       child: Card(
@@ -36,10 +84,13 @@ class BlogsCard extends StatelessWidget {
                 clipBehavior: Clip.antiAlias,
                 child: imageUrl != 'https://lavie.orangedigitalcenteregypt.com'
                     ? Image(
-                        image: NetworkImage(imageUrl!),
-                  fit: BoxFit.cover,
+                        image: NetworkImage(imageUrl),
+                        fit: BoxFit.cover,
                       )
-                    : Image.asset('${imageAsset}product_image.png' ,fit: BoxFit.cover,),
+                    : Image.asset(
+                        '${imageAsset}product_image.png',
+                        fit: BoxFit.cover,
+                      ),
               ),
             ),
             Expanded(
@@ -49,42 +100,7 @@ class BlogsCard extends StatelessWidget {
                   bottom: 16,
                   right: 16,
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '2 days age',
-                      style: textStyle(
-                        color: primaryColor,
-                        weight: FontWeight.w400,
-                        size: 13,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Text(
-                      title!,
-                      style: textStyle(
-                          color: Colors.black,
-                          weight: FontWeight.w600,
-                          size: 17),
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Text(
-                      description!,
-                      style: textStyle(
-                          color: const Color.fromRGBO(125, 123, 123, .78),
-                          weight: FontWeight.w400,
-                          size: 13),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
+                child: child,
               ),
             )
           ],

@@ -48,7 +48,7 @@ class DioHelper {
 
   static Future<Response> postData({
     @required String? endPoint,
-    @required String? method,
+    String? method,
     @required dynamic data,
   }) async {
     dio!.options.headers = {

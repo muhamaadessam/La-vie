@@ -113,7 +113,7 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      'You have 30 points',
+                                      user.userModel!.data!.userPoints==null? 'You don\'t have points': 'You have ${user.userModel!.data!.userPoints} points',
                                       style: GoogleFonts.roboto(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500),

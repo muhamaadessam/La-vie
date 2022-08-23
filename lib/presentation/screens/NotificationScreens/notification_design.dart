@@ -21,7 +21,6 @@ class NotificationDesign extends StatelessWidget {
     imageUrl != 'https://lavie.orangedigitalcenteregypt.com'
         ? imageProvider = NetworkImage(imageUrl!)
         : imageProvider = AssetImage('${imageAsset}profile.png');
-    debugPrint(imageUrl);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
