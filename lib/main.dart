@@ -63,6 +63,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (BuildContext context) => HomeTapsCubit(),
         ),
+
       ],
       child: BlocConsumer<AppCubit, AppState>(
         listener: (context, state) => () {},

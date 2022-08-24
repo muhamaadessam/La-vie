@@ -795,7 +795,10 @@ class ForumsCubit extends Cubit<ForumsStates> {
     size: 12,
   );
 
+  bool? isAll = true;
+
   void changeForumsData(bool forumsIsAll) {
+    isAll = forumsIsAll;
     if (!forumsIsAll) {
       buttonStyle1 = ButtonStyle(
         elevation: MaterialStateProperty.resolveWith((states) => 0),
@@ -879,7 +882,7 @@ class MyForumsCubit extends Cubit<MyForumsStates> {
   void makeLikePost(String? id) {
     DioHelper.postData(endPoint: forums, method: '/$id/like', data: null)
         .then((value) {
-      likeList={id!: true};
+      likeList = {id!: true};
       emit(MyForumsLikeSuccessState());
     }).catchError((error) {
       debugPrint("error : ${error.toString()}");

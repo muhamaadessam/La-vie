@@ -20,7 +20,6 @@ class ForumScreen extends StatelessWidget {
     MyForumsCubit myForums = MyForumsCubit.get(context);
     forums.getForumsData();
     myForums.getMyForumsData();
-    //forums.getSearch('');
     return BlocConsumer<MyForumsCubit, MyForumsStates>(
       listener: (context, state) => () {},
       builder: (context, state) => BlocConsumer<ForumsCubit, ForumsStates>(
@@ -88,7 +87,6 @@ class ForumScreen extends StatelessWidget {
                             onPressed: () {
                               print('All Form');
                               forums.getForumsData();
-                              print(forums.forumsModel!.data![4].title);
                               forums.changeForumsData(true);
                             },
                             style: forums.buttonStyle2,
@@ -109,8 +107,6 @@ class ForumScreen extends StatelessWidget {
                               onPressed: () {
                                 forums.changeForumsData(false);
                                 myForums.getMyForumsData();
-                                print(forums.forumsModel!.data![4].title);
-                                print('My Forums');
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -133,14 +129,13 @@ class ForumScreen extends StatelessWidget {
                                   shrinkWrap: true,
                                   controller: listScrollController,
                                   itemBuilder: (context, index) {
-                                    if (forums.forumsModel!.data!.isNotEmpty) {
+                                    if (forums.isAll!) {
                                       return Post(
                                         index: index,
                                         forumsCubit: forums,
                                         forumsModel: forums.forumsModel!,
                                       );
-                                    } else if (myForums
-                                        .forumsModel!.data!.isNotEmpty) {
+                                    } else if (!forums.isAll!) {
                                       return Post(
                                         myForumsCubit: myForums,
                                         index: index,
@@ -155,7 +150,9 @@ class ForumScreen extends StatelessWidget {
                                         height: 16,
                                       ),
                                   itemCount:
-                                      myForums.forumsModel!.data!.length),
+                                      forums.isAll!
+                                          ? forums.forumsModel!.data!.length
+                                          : myForums.forumsModel!.data!.length),
                             ),
                     ],
                   ),

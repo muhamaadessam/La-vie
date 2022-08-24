@@ -88,7 +88,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                     CustomTextFormField(
                       title: 'Password',
-                      isPassword: false,
+                      isPassword: true,
                       controller: passwordController,
                       keyboardType: TextInputType.visiblePassword,
                       validation: (String? value) {
@@ -103,7 +103,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                     CustomTextFormField(
                       title: 'Confirm Password',
-                      isPassword: false,
+                      isPassword: true,
                       controller: confirmPasswordController,
                       keyboardType: TextInputType.visiblePassword,
                       validation: (String? value) {
