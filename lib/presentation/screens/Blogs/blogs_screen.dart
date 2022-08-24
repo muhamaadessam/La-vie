@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:la_vie/Shared/Cubit/cubit.dart';
+import 'package:la_vie/presentation/Components/navigation_bar.dart';
 import 'package:la_vie/presentation/screens/Blogs/card_blogs.dart';
 import '../../../Shared/Constant/text.dart';
 import '../../../Shared/Cubit/states.dart';
@@ -23,9 +24,11 @@ class BlogsScreen extends StatelessWidget {
             style: textStyle(
                 color: Colors.black, weight: FontWeight.w700, size: 21),
           ),
+          //leadingWidth: 0,
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => BottomBar()));
             },
             icon: const Icon(
               Icons.arrow_back_ios,
@@ -33,21 +36,23 @@ class BlogsScreen extends StatelessWidget {
             ),
           ),
         ),
-        body:state is BlogsLoadingState? const Center(child: CircularProgressIndicator()):Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ListView.separated(
-            itemBuilder: (context, index) => BlogsCard(
-              title: blogs.allBlogs![index].name,
-              description: blogs.allBlogs![index].description,
-              imageUrl:  blogs.allBlogs![index].imageUrl,
-            ),
-            separatorBuilder: (context, index) => const SizedBox(
-              height: 16,
-            ),
-            itemCount: blogs.allBlogs!.length,
-            physics: const BouncingScrollPhysics(),
-          ),
-        ),
+        body: state is BlogsLoadingState
+            ? const Center(child: CircularProgressIndicator())
+            : Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ListView.separated(
+                  itemBuilder: (context, index) => BlogsCard(
+                    title: blogs.allBlogs![index].name,
+                    description: blogs.allBlogs![index].description,
+                    imageUrl: blogs.allBlogs![index].imageUrl,
+                  ),
+                  separatorBuilder: (context, index) => const SizedBox(
+                    height: 16,
+                  ),
+                  itemCount: blogs.allBlogs!.length,
+                  physics: const BouncingScrollPhysics(),
+                ),
+              ),
       ),
     );
   }

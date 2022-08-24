@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:la_vie/Shared/Network/Local/cash_helper.dart';
 import '../../../Shared/Cubit/cubit.dart';
 import '../../../Shared/Cubit/states.dart';
 import 'components.dart';
@@ -64,6 +65,7 @@ class LoginScreen extends StatelessWidget {
                                 SignInCubit.get(context).userSignIn(context,
                                     email: emailController!.text,
                                     password: passwordController!.text);
+                                CashHelper.put(key: 'Login', value: true);
                               }
                               /* "email": "me1573@gmail.com",
                                  "password": "MmEe@15920"*/

@@ -112,10 +112,8 @@ class ForumScreen extends StatelessWidget {
                       const SizedBox(
                         height: 16,
                       ),
-                      state is ForumsLoadingState &&
-                              state is MyForumsLoadingState &&
-                              forums.forumsModel!.data == null &&
-                              myForums.forumsModel!.data == null
+                              forums.forumsModel == null ||
+                              myForums.forumsModel == null
                           ? const Center(child: CircularProgressIndicator())
                           : SizedBox(
                               width: double.infinity,

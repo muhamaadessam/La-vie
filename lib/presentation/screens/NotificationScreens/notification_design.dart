@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:intl/intl.dart';
 import '../../../Shared/Constant/images.dart';
 import '../../../Shared/Constant/text.dart';
 
@@ -17,6 +17,12 @@ class NotificationDesign extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var parsedDate = DateTime.parse(createAt!);
+    final DateFormat formatterDay = DateFormat('EEEE');
+    final DateFormat formatterTime = DateFormat('').add_jm();
+    final String formattedDay = formatterDay.format(parsedDate);
+    final String formattedTime = formatterTime.format(parsedDate);
+
     ImageProvider? imageProvider;
     imageUrl != 'https://lavie.orangedigitalcenteregypt.com'
         ? imageProvider = NetworkImage(imageUrl!)
@@ -55,7 +61,7 @@ class NotificationDesign extends StatelessWidget {
                   height: 4,
                 ),
                 Text(
-                  createAt!,
+                  '$formattedDay at$formattedTime',
                   style: textStyle(
                     weight: FontWeight.w400,
                     size: 14,

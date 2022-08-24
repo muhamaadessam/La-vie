@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:la_vie/Shared/Constant/colors.dart';
-import 'package:la_vie/Shared/Constant/images.dart';
 import 'package:la_vie/Shared/Constant/text.dart';
+import 'package:la_vie/presentation/screens/Blogs/details_blog.dart';
+import '../../Components/custom_card.dart';
 
 class BlogsCard extends StatelessWidget {
   const BlogsCard(
@@ -16,93 +17,52 @@ class BlogsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomCard(
-      imageUrl: imageUrl!,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '2 days age',
-            style: textStyle(
-              color: primaryColor,
-              weight: FontWeight.w400,
-              size: 13,
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => DetailsBlog(
+              name: title,
+              imageUrl: imageUrl,
+              description: description,
             ),
           ),
-          const SizedBox(
-            height: 12,
-          ),
-          Text(
-            title!,
-            style: textStyle(
-                color: Colors.black, weight: FontWeight.w600, size: 17),
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Text(
-            description!,
-            style: textStyle(
-                color: const Color.fromRGBO(125, 123, 123, .78),
-                weight: FontWeight.w400,
-                size: 13),
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class CustomCard extends StatelessWidget {
-  const CustomCard({Key? key, required this.child, required this.imageUrl})
-      : super(key: key);
-  final Widget child;
-  final String imageUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 162,
-      child: Card(
-        elevation: 15,
-        shadowColor: Colors.black.withOpacity(.4),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Row(
+        );
+      },
+      child: CustomCard(
+        imageUrl: imageUrl!,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                width: 150,
-                height: 130,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: imageUrl != 'https://lavie.orangedigitalcenteregypt.com'
-                    ? Image(
-                        image: NetworkImage(imageUrl),
-                        fit: BoxFit.cover,
-                      )
-                    : Image.asset(
-                        '${imageAsset}product_image.png',
-                        fit: BoxFit.cover,
-                      ),
+            Text(
+              '2 days age',
+              style: textStyle(
+                color: primaryColor,
+                weight: FontWeight.w400,
+                size: 13,
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                  bottom: 16,
-                  right: 16,
-                ),
-                child: child,
-              ),
-            )
+            const SizedBox(
+              height: 12,
+            ),
+            Text(
+              title!,
+              style: textStyle(
+                  color: Colors.black, weight: FontWeight.w600, size: 17),
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            Text(
+              description!,
+              style: textStyle(
+                  color: const Color.fromRGBO(125, 123, 123, .78),
+                  weight: FontWeight.w400,
+                  size: 13),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
           ],
         ),
       ),

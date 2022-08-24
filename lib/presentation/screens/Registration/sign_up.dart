@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../Shared/Cubit/cubit.dart';
 import '../../../Shared/Cubit/states.dart';
+import '../../../Shared/Network/Local/cash_helper.dart';
 import 'components.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -107,7 +108,7 @@ class SignUpScreen extends StatelessWidget {
                       keyboardType: TextInputType.visiblePassword,
                       validation: (String? value) {
                         if (value!.isEmpty) {
-                          return 'Please enter your email';
+                          return 'Please enter your Password';
                         }
                         return null;
                       },
@@ -125,6 +126,7 @@ class SignUpScreen extends StatelessWidget {
                                     lastName: lastNameController!.text,
                                     email: emailController!.text,
                                     password: passwordController!.text);
+                                CashHelper.put(key: 'Login', value: true);
                               }
                             },
                             child: const SizedBox(

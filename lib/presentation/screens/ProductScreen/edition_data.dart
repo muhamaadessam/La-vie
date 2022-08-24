@@ -5,9 +5,9 @@ import '../../../Shared/Constant/images.dart';
 
 class RowEditionData extends StatelessWidget {
   const RowEditionData({Key? key, required this.image, required this.title, required this.result}) : super(key: key);
-  final String image;
-  final String title;
-  final String result;
+  final String? image;
+  final String? title;
+  final String? result;
 
 
   @override
@@ -38,7 +38,7 @@ class RowEditionData extends StatelessWidget {
                       height: 8,
                     ),
                     Text(
-                      result,
+                      result!,
                       style: GoogleFonts.roboto(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -73,7 +73,7 @@ class RowEditionData extends StatelessWidget {
               ],
             ),
             Text(
-              title,
+              title!,
               style: GoogleFonts.roboto(
                 color: Colors.white,
                 fontWeight: FontWeight.w400,

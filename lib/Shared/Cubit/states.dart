@@ -1,6 +1,9 @@
 abstract class AppState {}
 class AppInitialState extends AppState {}
 class AppChangeBottomNavBarState extends AppState {}
+class QRLoadingState extends AppState {}
+class QRSuccessState extends AppState {}
+class QRErrorState extends AppState {}
 
 
 abstract class SignInStates {}
@@ -55,6 +58,7 @@ class ProductsInitialState extends ProductsStates {}
 class ProductsLoadingState extends ProductsStates {}
 class ProductsSuccessState extends ProductsStates {}
 class ProductsErrorState extends ProductsStates {}
+class ProductsChangeNumberProductState extends ProductsStates {}
 class ProductsSearchLoadingState extends ProductsStates {}
 class ProductsSearchSuccessState extends ProductsStates {}
 

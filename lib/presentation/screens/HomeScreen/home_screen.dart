@@ -19,7 +19,6 @@ class HomeScreen extends StatelessWidget {
     ProductsCubit? products = ProductsCubit.get(context);
     PlantsCubit? plants = PlantsCubit.get(context);
     HomeTapsCubit? tabs = HomeTapsCubit.get(context);
-    //print('plants data: ${plants.plantsModel!.data![0].description.toString()}');
     List<String> tabsTitles = ['All', 'Plants', 'Seeds', 'Tools'];
     ScrollController scrollController = ScrollController();
     return BlocConsumer<HomeTapsCubit, HomeTabsStates>(
@@ -104,9 +103,35 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                      child: Container(
-                          child: tabs.index == 0
-                              ? (products.productsModel == null
+                    child: Container(
+                      child: tabs.index == 0
+                          ? (products.productsModel == null
+                              ? const Center(child: CircularProgressIndicator())
+                              : GridView.count(
+                                  physics: const BouncingScrollPhysics(),
+                                  crossAxisCount: 2,
+                                  childAspectRatio: .70,
+                                  scrollDirection: Axis.vertical,
+                                  children: List.generate(
+                                    products.productsModel!.data!.length,
+                                    (index) => Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ProductCard(
+                                        image:
+                                            '${products.productsModel!.data![index].imageUrl}',
+                                        name: products
+                                            .productsModel!.data![index].name,
+                                        price: 5,
+                                        numberForAddCart: 1,
+                                        id: products.productsModel!.data![index]
+                                            .productId,
+                                        counter: products.counter,
+                                      ),
+                                    ),
+                                  ),
+                                ))
+                          : (tabs.index == 1
+                              ? (plants.plantsModel == null
                                   ? const Center(
                                       child: CircularProgressIndicator())
                                   : GridView.count(
@@ -115,21 +140,24 @@ class HomeScreen extends StatelessWidget {
                                       childAspectRatio: .70,
                                       scrollDirection: Axis.vertical,
                                       children: List.generate(
-                                        products.productsModel!.data!.length,
+                                        plants.plantsModel!.data!.length,
                                         (index) => Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: productCard(context,
-                                              image:
-                                                  '${products.productsModel!.data![index].imageUrl}',
-                                              name: products.productsModel!
-                                                  .data![index].name,
-                                              price: 5,
-                                              numberForAddCart: 1),
+                                          child: ProductCard(
+                                            image:
+                                                '${plants.plantsModel!.data![index].imageUrl}',
+                                            name: plants
+                                                .plantsModel!.data![index].name,
+                                            price: 5,
+                                            numberForAddCart: 1,
+                                            id: plants.plantsModel!.data![index]
+                                                .plantId,
+                                          ),
                                         ),
                                       ),
                                     ))
-                              : (tabs.index == 1
-                                  ? (plants.plantsModel == null
+                              : (tabs.index == 2
+                                  ? (seeds.seedsModel == null
                                       ? const Center(
                                           child: CircularProgressIndicator())
                                       : GridView.count(
@@ -139,71 +167,51 @@ class HomeScreen extends StatelessWidget {
                                           childAspectRatio: .70,
                                           scrollDirection: Axis.vertical,
                                           children: List.generate(
-                                            plants.plantsModel!.data!.length,
+                                            seeds.seedsModel!.data!.length,
                                             (index) => Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: productCard(context,
-                                                  image:
-                                                      '${plants.plantsModel!.data![index].imageUrl}',
-                                                  name: plants.plantsModel!
-                                                      .data![index].name,
-                                                  price: 5,
-                                                  numberForAddCart: 1),
+                                              child: ProductCard(
+                                                image:
+                                                    '${seeds.seedsModel!.data![index].imageUrl}',
+                                                name: seeds.seedsModel!
+                                                    .data![index].name,
+                                                price: 5,
+                                                numberForAddCart: 1,
+                                                id: seeds.seedsModel!
+                                                    .data![index].seedId,
+                                              ),
                                             ),
                                           ),
                                         ))
-                                  : (tabs.index == 2
-                                      ? (seeds.seedsModel == null
-                                          ? const Center(
-                                              child:
-                                                  CircularProgressIndicator())
-                                          : GridView.count(
-                                              physics:
-                                                  const BouncingScrollPhysics(),
-                                              crossAxisCount: 2,
-                                              childAspectRatio: .70,
-                                              scrollDirection: Axis.vertical,
-                                              children: List.generate(
-                                                seeds.seedsModel!.data!.length,
-                                                (index) => Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: productCard(context,
-                                                      image:
-                                                          '${seeds.seedsModel!.data![index].imageUrl}',
-                                                      name: seeds.seedsModel!
-                                                          .data![index].name,
-                                                      price: 5,
-                                                      numberForAddCart: 1),
-                                                ),
-                                              ),
-                                            ))
-                                      : (tools.toolsModel == null
-                                          ? const Center(
-                                              child:
-                                                  CircularProgressIndicator())
-                                          : GridView.count(
-                                              physics:
-                                                  const BouncingScrollPhysics(),
-                                              crossAxisCount: 2,
-                                              childAspectRatio: .70,
-                                              scrollDirection: Axis.vertical,
-                                              children: List.generate(
-                                                tools.toolsModel!.data!.length,
-                                                (index) => Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: productCard(context,
-                                                      image:
-                                                          '${tools.toolsModel!.data![index].imageUrl}',
-                                                      name: tools.toolsModel!
-                                                          .data![index].name,
-                                                      price: 5,
-                                                      numberForAddCart: 1),
-                                                ),
-                                              ),
-                                            )))))),
+                                  : (tools.toolsModel == null
+                                      ? const Center(
+                                          child: CircularProgressIndicator())
+                                      : GridView.count(
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          crossAxisCount: 2,
+                                          childAspectRatio: .70,
+                                          scrollDirection: Axis.vertical,
+                                          children: List.generate(
+                                            tools.toolsModel!.data!.length,
+                                            (index) => Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: ProductCard(
+                                                  image:
+                                                      '${tools.toolsModel!.data![index].imageUrl}',
+                                                  name: tools.toolsModel!
+                                                      .data![index].name,
+                                                  price: 5,
+                                                  numberForAddCart: 1,
+                                                  id: tools.toolsModel!
+                                                      .data![index].toolId),
+                                            ),
+                                          ),
+                                        )))),
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:la_vie/Models/blogs_model.dart';
+import 'package:la_vie/Models/cart_model.dart';
 import 'package:la_vie/Models/forums_model.dart';
 import 'package:la_vie/Models/seedsModel.dart';
 import 'package:la_vie/Shared/Cubit/states.dart';
@@ -33,7 +35,7 @@ class AppCubit extends Cubit<AppState> {
   int currentIndex = 2;
   List<Widget> screens = [
     const BlogsScreen(),
-    const QRCodeScreen(),
+    QRCodeScreen(),
     const HomeScreen(),
     const NotificationsScreen(),
     const ProfileScreen(),
@@ -42,6 +44,37 @@ class AppCubit extends Cubit<AppState> {
   void changeIndex(int index) {
     currentIndex = index;
     emit(AppChangeBottomNavBarState());
+  }
+
+  String scanBarcode = 'Unknown';
+  PlantsModel? plantsModel;
+
+  Future<void> scanQR() async {
+    emit(QRLoadingState());
+    String barcodeScanRes;
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ffffff', 'Cancel', false, ScanMode.QR);
+      //barcodeScanRes = result
+      DioHelper.getData(
+          endPoint: plants,
+          method: '{plantId}',
+          query: {'plantId': barcodeScanRes}).then((value) {
+        plantsModel = PlantsModel.fromJson(value.data);
+        //debugPrint('Plant id : ${plantsModel!.data![0].plantId}');
+        scanBarcode = barcodeScanRes;
+        debugPrint('barcodeScanRes: $barcodeScanRes');
+        emit(QRSuccessState());
+      }).catchError((error){
+        debugPrint('error her :${error.toString()}');
+        emit(QRErrorState());
+      });
+      scanBarcode = barcodeScanRes;
+      debugPrint('barcodeScanRes: $barcodeScanRes');
+      emit(AppChangeBottomNavBarState());
+    }catch(e) {
+     debugPrint('error her :${e.toString()}');
+    }
   }
 }
 
@@ -264,13 +297,19 @@ class ProductsCubit extends Cubit<ProductsStates> {
 
   static ProductsCubit get(context) => BlocProvider.of(context);
   ProductsModel? productsModel;
-  List<dynamic>? search = [];
+  Map<String, int> numberProduct = {};
+  int counter = 1;
 
-  void getSearch(String? value) {
-    emit(ProductsSearchLoadingState());
-    search = [];
-    search!.add(value);
-    emit(ProductsSearchSuccessState());
+  void increaseNumberProduct(String? id) {
+    numberProduct[id.toString()] = (numberProduct[id.toString()]! + 1);
+    emit(ProductsChangeNumberProductState());
+  }
+
+  void decreaseNumberProduct(String? id) {
+    if (numberProduct[id.toString()]! > 1) {
+      numberProduct[id.toString()] = (numberProduct[id.toString()]! - 1);
+    }
+    emit(ProductsChangeNumberProductState());
   }
 
   void getProductsData() {
@@ -280,6 +319,10 @@ class ProductsCubit extends Cubit<ProductsStates> {
       method: '',
     ).then((value) {
       productsModel = ProductsModel.fromJson(value.data);
+
+      productsModel!.data!.forEach((element) {
+        numberProduct.addAll({element.productId.toString(): counter});
+      });
       print('Product Data : ${productsModel!.data![1].description}');
       emit(ProductsSuccessState());
     }).catchError((error) {
@@ -293,17 +336,54 @@ class CartCubit extends Cubit<CartStates> {
   CartCubit() : super(CartInitialState());
 
   static CartCubit get(context) => BlocProvider.of(context);
-  int counter = 1;
 
-  void addProductToCart() {
-    counter++;
+  // int counter = 0;
+
+  List<CartModel> data = [
+    CartModel(id: '0id', numberProduct: 5),
+  ];
+
+  void increaseNumberProduct(String? id) {
+    //debugPrint(id);
+    //debugPrint(id);
+
+    for (var element in data) {
+      debugPrint('element.id :${element.id}');
+      debugPrint(element.id);
+      if (element.id == id) {
+        element.numberProduct++;
+        debugPrint(element.numberProduct.toString());
+      } else {
+        data.add(CartModel(id: id, numberProduct: 1));
+      }
+    }
     emit(CartNumberProductState());
   }
 
-  void removeProductToCart() {
-    counter--;
+  int numberProduct(String? id) {
+    for (var element in data) {
+      if (element.id == id) {
+        return element.numberProduct;
+      } else {
+        return 0;
+      }
+    }
+    emit(CartNumberProductState());
+    return 0;
+  }
+
+  void decreaseNumberProduct(String? id) {
+    data.forEach((element) {
+      if (element.id == id) {
+        element.numberProduct--;
+      }
+    });
     emit(CartNumberProductState());
   }
+
+  void addProductToCart() {}
+
+  void removeProductToCart() {}
 }
 
 class UserCubit extends Cubit<UserStates> {
@@ -387,9 +467,22 @@ class ForumsCubit extends Cubit<ForumsStates> {
   static ForumsCubit get(context) => BlocProvider.of(context);
 
   ForumsModel? forumsModel;
-  List<dynamic>? search = [];
+  List<ForumsModel>? search = [];
 
   File? image;
+
+  void getSearch(String? id) {
+    emit(ForumsSearchLoadingState());
+    DioHelper.getData(endPoint: forums, method: '/$id').then((value) {
+      forumsModel = ForumsModel.fromJson(value.data);
+      search!.add(forumsModel!);
+      print('Search forumId : ${value.data['data']['forumId']}');
+      emit(ForumsSearchSuccessState());
+    }).onError((error, stackTrace) {
+      debugPrint('Error data: $error');
+      emit(ForumsSearchErrorState());
+    });
+  }
 
   Future pickImage(ImageSource source) async {
     try {
@@ -448,14 +541,14 @@ class ForumsCubit extends Cubit<ForumsStates> {
   }
 
   void forumsAddPost({
-     String? title,
-     String? description,
-     String? imageBase64,
+    String? title,
+    String? description,
+    String? imageBase64,
   }) {
     emit(ForumsAddPostLoadingState());
     DioHelper.postData(
       endPoint: forums,
-      method:'',
+      method: '',
       data: {
         "title": title,
         "description": description,
@@ -471,21 +564,6 @@ class ForumsCubit extends Cubit<ForumsStates> {
         debugPrint('Add Post error : ${error.toString()}');
       },
     );
-  }
-
-  void getSearch(String? title) {
-    emit(ForumsSearchLoadingState());
-    //search = [];
-
-    DioHelper.getData(
-            endPoint: forums, method: '/0271f5df-7522-48ee-9157-40fa75bd7c3c')
-        .then((value) {
-      print('Search forumId : ${value.data['data']['forumId']}');
-      emit(ForumsSearchSuccessState());
-    }).onError((error, stackTrace) {
-      debugPrint('Error data: $error');
-      emit(ForumsSearchErrorState());
-    });
   }
 
   void getForumsData() {

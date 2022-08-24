@@ -11,15 +11,15 @@ class PlantsModel {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['type'] = type;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -56,14 +56,14 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['plantId'] = this.plantId;
-    data['name'] = this.name;
-    data['description'] = this.description;
-    data['imageUrl'] = this.imageUrl;
-    data['waterCapacity'] = this.waterCapacity;
-    data['sunLight'] = this.sunLight;
-    data['temperature'] = this.temperature;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['plantId'] = plantId;
+    data['name'] = name;
+    data['description'] = description;
+    data['imageUrl'] = imageUrl;
+    data['waterCapacity'] = waterCapacity;
+    data['sunLight'] = sunLight;
+    data['temperature'] = temperature;
     return data;
   }
 }

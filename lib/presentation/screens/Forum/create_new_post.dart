@@ -192,7 +192,7 @@ class CreatePost extends StatelessWidget {
                               forums.forumsAddPost(
                                 title: title.text,
                                 description: description.text,
-                                imageBase64: base64Encode(bytes),
+                                imageBase64: "data:image/png;base64,${base64Encode(bytes)}",
                               );
                               Navigator.pop(context);
                             }

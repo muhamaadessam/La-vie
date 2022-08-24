@@ -23,7 +23,7 @@ class RegistrationScreen extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           child: RegistrationBackground(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 45.0),
+              padding: const EdgeInsets.symmetric(horizontal: 36.0),
               child: DefaultTabController(
                 length: 2,
                 child: Column(

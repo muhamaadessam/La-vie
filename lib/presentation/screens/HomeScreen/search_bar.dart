@@ -17,7 +17,7 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var list = ProductsCubit.get(context).search;
+    //var list = ProductsCubit.get(context).search;
     return BlocConsumer<ProductsCubit, ProductsStates>(
       listener: (BuildContext context, state) {},
       builder: (BuildContext context, state) => Padding(
@@ -31,7 +31,7 @@ class SearchBar extends StatelessWidget {
                   /*for (var element in ProductsCubit.get(context).productsModel!.data![0].name!) {
                     ProductsCubit.get(context).getSearch(element.name);
                   }*/
-                  for (int i = 0;
+                  /*for (int i = 0;
                       ProductsCubit.get(context).productsModel!.data!.length >
                           i;
                       i++) {
@@ -41,7 +41,7 @@ class SearchBar extends StatelessWidget {
                             .data![i]
                             .name);
                     debugPrint(list.toString());
-                  }
+                  }*/
                   //debugPrint(list);
                   debugPrint(value.toString());
                 },

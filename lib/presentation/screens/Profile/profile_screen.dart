@@ -5,10 +5,12 @@ import 'package:la_vie/Shared/Constant/images.dart';
 import 'package:la_vie/Shared/Constant/text.dart';
 import 'package:la_vie/Shared/Cubit/cubit.dart';
 import 'package:la_vie/Shared/Cubit/states.dart';
+import 'package:la_vie/Shared/Network/Local/cash_helper.dart';
 import 'package:la_vie/presentation/screens/Exam/qustion_screen.dart';
 import 'package:la_vie/presentation/screens/Profile/background_profile.dart';
 import 'package:la_vie/presentation/screens/Profile/components.dart';
 
+import '../../../Shared/Constant/colors.dart';
 import '../Registration/registrationScreen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -25,34 +27,6 @@ class ProfileScreen extends StatelessWidget {
       builder: (context, state) => Scaffold(
         extendBody: true,
         extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const RegistrationScreen()));
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const QuestionScreen()));
-              },
-              icon: const Icon(
-                Icons.more_horiz,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
         body: state is UserLoadingState || user.userModel == null
             ? const Center(child: CircularProgressIndicator())
             : BackgroundProfile(
@@ -113,7 +87,9 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      user.userModel!.data!.userPoints==null? 'You don\'t have points': 'You have ${user.userModel!.data!.userPoints} points',
+                                      user.userModel!.data!.userPoints == null
+                                          ? 'You don\'t have points'
+                                          : 'You have ${user.userModel!.data!.userPoints} points',
                                       style: GoogleFonts.roboto(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500),
@@ -166,8 +142,71 @@ class ProfileScreen extends StatelessWidget {
                                       firstName: user.userModel!.data!.lastName,
                                     );
                                   }),
-                              const SizedBox(
+                              /*const SizedBox(
                                 height: 64,
+                              ),*/
+                              const Spacer(),
+                              ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(15.0),
+                                            ),
+                                          ),
+                                          title: Text(
+                                            'LogOut',
+                                            style: textStyle(
+                                              color: primaryColor,
+                                              size: 20,
+                                              weight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          content: Text(
+                                            'Do you want to Log out the app',
+                                            style: textStyle(color: Colors.black, size: 16),
+                                          ),
+                                          actions: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                'NO',
+                                                style: textStyle(color: Colors.white, size: 16),
+                                              ),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                CashHelper.put(key: 'Login', value: false);
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                    const RegistrationScreen(),
+                                                  ),
+                                                );
+                                              },
+                                              child: Text(
+                                                'YES',
+                                                style: textStyle(color: Colors.white, size: 16),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      });
+
+                                },
+                                child: Text(
+                                  'Log Out',
+                                  style: textStyle(color: Colors.white),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 32,
                               ),
                             ],
                           ),

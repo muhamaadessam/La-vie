@@ -2,45 +2,123 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:la_vie/Shared/Constant/colors.dart';
+import 'package:la_vie/Shared/Constant/text.dart';
+import 'package:la_vie/Shared/Cubit/cubit.dart';
+import 'package:la_vie/presentation/Components/navigation_bar.dart';
+import 'package:la_vie/presentation/screens/ProductScreen/productScreen.dart';
 
-class QRCodeScreen extends StatefulWidget {
-  const QRCodeScreen({Key? key}) : super(key: key);
+import '../../../Shared/Cubit/states.dart';
 
-  @override
-  State<QRCodeScreen> createState() => _QRCodeScreenState();
-}
-
-class _QRCodeScreenState extends State<QRCodeScreen> {
-  String _scanBarcode = 'Unknown';
-
-  Future<void> scanQR() async {
-    String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ffffff', 'Cancel', false, ScanMode.QR);
-      print(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
-    setState(() {
-      _scanBarcode = barcodeScanRes;
-    });
-  }
-
+class QRCodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    AppCubit qr = AppCubit.get(context);
+    return BlocConsumer<AppCubit, AppState>(
+      listener: (context, states) => {},
+      builder: (context, states) => Container(
         alignment: Alignment.center,
         child: Flex(
           direction: Axis.vertical,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-                onPressed: () => scanQR(), child: Text('Start QR scan')),
-            Text('Scan result : $_scanBarcode\n',
-                style: TextStyle(fontSize: 20))
+              onPressed: () {
+                qr.scanQR();
+                //states is QRLoadingState ||qr.plantsModel!.data!.isEmpty ?const CircularProgressIndicator() :
+                showDialog(
+                    context: context,
+                    builder: (context) => Padding(
+                          padding: const EdgeInsets.only(
+                              right: 50, left: 50, top: 640, bottom: 150),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(.6),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            width: double.infinity,
+                            height: 100,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      //  qr.plantsModel!.data!.isEmpty ?const CircularProgressIndicator() :
+                                      Text(
+                                        '${qr.plantsModel!.data!.first.name}',
+                                        style: textStyle(
+                                          color: Colors.black,
+                                          size: 16,
+                                          weight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      //  (qr.plantsModel!.data!.isEmpty) ?const CircularProgressIndicator() :
+                                      Text(
+                                        '${qr.plantsModel!.data![0].description}',
+                                        style: textStyle(
+                                          color: Colors.black,
+                                          size: 14,
+                                          weight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ProductScreen(
+                                            name: qr
+                                                .plantsModel!.data!.first.name!,
+                                            description: qr.plantsModel!.data!
+                                                .first.description!,
+                                            imageUrl: qr.plantsModel!.data!
+                                                .first.imageUrl!,
+                                            waterCapacity: qr.plantsModel!.data!
+                                                .first.waterCapacity!,
+                                            sunLight: qr.plantsModel!.data!
+                                                .first.sunLight!,
+                                            temperature: qr.plantsModel!.data!
+                                                .first.temperature!,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: primaryColor,
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      child: const Icon(
+                                        Icons.arrow_forward_sharp,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ));
+              },
+              child: const Text('Start QR scan'),
+            ),
           ],
         ),
+      ),
     );
   }
 }

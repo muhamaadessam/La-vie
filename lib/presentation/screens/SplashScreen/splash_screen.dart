@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:la_vie/presentation/screens/HomeScreen/home_screen.dart';
-import 'package:la_vie/presentation/screens/Registration/loginScreen.dart';
 import 'package:la_vie/presentation/screens/Registration/registrationScreen.dart';
-
+import '../../../Shared/Network/Local/cash_helper.dart';
 import '../../Components/navigation_bar.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -17,10 +15,21 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(seconds: 3)).then((value) => {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> const RegistrationScreen()))
+    Future.delayed(const Duration(seconds: 3)).then((value) {
+      !CashHelper.get(key: 'Login')
+          ? Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const RegistrationScreen(),
+              ),
+            )
+          : Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const BottomBar(),
+              ),
+            );
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -15,6 +15,7 @@ void main() {
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
   CashHelper.init();
+ // CashHelper.put(key: 'Login',value: true);
   runApp(const MyApp());
 }
 
