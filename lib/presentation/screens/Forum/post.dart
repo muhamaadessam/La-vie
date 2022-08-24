@@ -4,7 +4,6 @@ import 'package:la_vie/Shared/Constant/colors.dart';
 import 'package:la_vie/Shared/Constant/images.dart';
 import 'package:la_vie/Shared/Constant/text.dart';
 import 'package:la_vie/Shared/Cubit/cubit.dart';
-import 'package:la_vie/presentation/screens/Registration/components.dart';
 
 class Post extends StatelessWidget {
   const Post({
@@ -127,14 +126,17 @@ class Post extends StatelessWidget {
                         onTap: () {
                           myForums
                               .makeLikePost(forumsModel.data![index].forumId!);
-                          debugPrint(
-                              myForums.forumsModel!.data![index].forumId!);
                         },
                         child: Row(
                           children: [
                             Image.asset(
                               '${imageAsset}Like.png',
                               width: 18,
+                              color: myForums.likeList[
+                                          forumsModel.data![index].forumId!] ==
+                                      null
+                                  ? const Color.fromRGBO(0, 0, 0, .6)
+                                  : primaryColor,
                             ),
                             Text(
                               '  ${forumsModel.data![index].forumLikes!.length} Like',
@@ -186,18 +188,22 @@ class Post extends StatelessWidget {
                                         decoration: InputDecoration(
                                           //label: Text('Comment'),
                                           labelText: 'Comment',
-                                          labelStyle: textStyle(color: primaryColor),
+                                          labelStyle:
+                                              textStyle(color: primaryColor),
                                           focusColor: primaryColor,
-                                          focusedBorder:OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(5),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
                                             borderSide: BorderSide(
                                               color: primaryColor,
                                             ),
                                           ),
                                           border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(5),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
                                             borderSide: const BorderSide(
-                                              color: Color.fromRGBO(147, 147, 147, 1),
+                                              color: Color.fromRGBO(
+                                                  147, 147, 147, 1),
                                             ),
                                           ),
                                         ),

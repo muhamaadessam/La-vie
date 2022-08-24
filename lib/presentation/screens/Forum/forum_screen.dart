@@ -49,18 +49,18 @@ class ForumScreen extends StatelessWidget {
               style: textStyle(
                   color: Colors.black, weight: FontWeight.w700, size: 21),
             ),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const ForumsSearch()));
-                },
-                icon: const Icon(
-                  Icons.search,
-                  color: Colors.black,
-                ),
-              ),
-            ],
+            // actions: [
+            //   IconButton(
+            //     onPressed: () {
+            //       Navigator.push(context,
+            //           MaterialPageRoute(builder: (context) => const ForumsSearch()));
+            //     },
+            //     icon: const Icon(
+            //       Icons.search,
+            //       color: Colors.black,
+            //     ),
+            //   ),
+            // ],
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);

@@ -5,27 +5,31 @@ import 'package:la_vie/Shared/Cubit/cubit.dart';
 import 'package:la_vie/Shared/Network/Local/cash_helper.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard(
-      {Key? key,
-      this.image,
-      this.name,
-      this.numberForAddCart,
-      this.price,
-      this.counter,
-      this.id})
-      : super(key: key);
+  const ProductCard({
+    Key? key,
+    this.image,
+    this.name,
+    //this.numberForAddCart,
+    this.price,
+    this.counter,
+    this.id,
+    required this.index,
+  }) : super(key: key);
   final String? image;
   final String? name;
-  final int? numberForAddCart;
+  //final int? numberForAddCart;
   final int? price;
   final int? counter;
+  final int? index;
   final String? id;
 
   @override
   Widget build(BuildContext context) {
-    CartCubit cart = CartCubit.get(context);
-    // ProductsCubit productsCubit = ProductsCubit.get(context);
+    SeedsCubit seedsCubit = SeedsCubit.get(context);
+    ProductsCubit productsCubit = ProductsCubit.get(context);
     PlantsCubit plantsCubit = PlantsCubit.get(context);
+    ToolsCubit toolsCubit = ToolsCubit.get(context);
+
     return Stack(
       children: [
         Column(
@@ -56,10 +60,15 @@ class ProductCard extends StatelessWidget {
                               height: 40,
                               child: TextButton(
                                 onPressed: () {
-                                  cart.decreaseNumberProduct(id);
-                                  debugPrint('${id!} : ${cart.numberProduct(id)}');
-                                  //debugPrint('SeedsCubit :  ${plantsCubit.plantsModel!.data![1].description}');
-                                  //debugPrint('return ${cart.numberProduct[id]}');
+                                  if (index == 0) {
+                                    productsCubit.decreaseNumberProduct(id);
+                                  } else if (index == 1) {
+                                    plantsCubit.decreaseNumberProduct(id);
+                                  } else if (index == 2) {
+                                    seedsCubit.decreaseNumberProduct(id);
+                                  } else if (index == 3) {
+                                    toolsCubit.decreaseNumberProduct(id);
+                                  }
                                 },
                                 child: Container(
                                   width: 20,
@@ -73,16 +82,30 @@ class ProductCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Text('${cart.numberProduct(id)}'),
+                            Text(index == 0
+                                ? '${productsCubit.numberProductProducts['$id']}'
+                                : (index == 1
+                                    ? '${plantsCubit.numberProduct['$id']}'
+                                    : (index == 2
+                                        ? '${seedsCubit.numberProductSeeds['$id']}'
+                                        : ('${toolsCubit.numberProductTools['$id']}')))),
+                            //seedsCubit.numberProduct['$id'].toString()
                             SizedBox(
                               width: 40,
                               height: 40,
                               child: TextButton(
                                 onPressed: () {
-                                  cart.increaseNumberProduct('0id');
-                                  debugPrint('${id!} : ${cart.numberProduct(id)}');
-
-                                  // debugPrint('${productsCubit.counter}');
+                                  if (index == 0) {
+                                    productsCubit.increaseNumberProduct(id);
+                                  } else if (index == 1) {
+                                    plantsCubit.increaseNumberProduct(id);
+                                    debugPrint(
+                                        plantsCubit.numberProduct.toString());
+                                  } else if (index == 2) {
+                                    seedsCubit.increaseNumberProduct(id);
+                                  } else if (index == 3) {
+                                    toolsCubit.increaseNumberProduct(id);
+                                  }
                                 },
                                 child: Container(
                                   width: 20,

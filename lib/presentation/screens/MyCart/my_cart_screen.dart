@@ -29,7 +29,7 @@ class MyCartScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: false
+      body: true
           ? Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(

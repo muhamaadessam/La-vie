@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => CartCubit(),
         ),
         BlocProvider(
-          create: (BuildContext context) => ForumsCubit()..getForumsData(),
+          create: (BuildContext context) => ForumsCubit()..getForumsData()..getSearch('54'),
         ),
         BlocProvider(
           create: (BuildContext context) => MyForumsCubit()..getMyForumsData(),

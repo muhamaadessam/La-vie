@@ -337,6 +337,23 @@ class SeedsCubit extends Cubit<SeedsStates> {
   static SeedsCubit get(context) => BlocProvider.of(context);
   SeedsModel? seedsModel;
 
+  Map<String, int> numberProductSeeds = {};
+  int counter = 1;
+
+  void increaseNumberProduct(String? id) {
+    numberProductSeeds[id.toString()] =
+        (numberProductSeeds[id.toString()]! + 1);
+    emit(SeedsChangeNumberProductState());
+  }
+
+  void decreaseNumberProduct(String? id) {
+    if (numberProductSeeds[id.toString()]! > 1) {
+      numberProductSeeds[id.toString()] =
+          (numberProductSeeds[id.toString()]! - 1);
+    }
+    emit(SeedsChangeNumberProductState());
+  }
+
   void getSeedsData() {
     emit(SeedsLoadingState());
     DioHelper.getData(
@@ -344,6 +361,9 @@ class SeedsCubit extends Cubit<SeedsStates> {
       method: '',
     ).then((value) {
       seedsModel = SeedsModel.fromJson(value.data);
+      for (var element in seedsModel!.data!) {
+        numberProductSeeds.addAll({element.seedId!: counter});
+      }
       print('seeds Data : ${seedsModel!.data![1].description}');
       emit(SeedsSuccessState());
     }).catchError((error) {
@@ -359,6 +379,30 @@ class PlantsCubit extends Cubit<PlantsStates> {
   static PlantsCubit get(context) => BlocProvider.of(context);
   PlantsModel? plantsModel;
 
+  Map<String, int> numberProduct = {};
+
+  //int counter = 1;
+
+  void increaseNumberProduct(String? id) {
+    numberProduct[id.toString()] = (numberProduct[id.toString()]! + 1);
+
+    emit(PlantsChangeNumberProductState());
+    emit(PlantsChangeNumberProductState());
+    emit(PlantsChangeNumberProductState());
+  }
+
+  void decreaseNumberProduct(String? id) {
+    if (numberProduct[id.toString()]! > 1) {
+      numberProduct[id.toString()] = (numberProduct[id.toString()]! - 1);
+      emit(PlantsChangeNumberProductState());
+      emit(PlantsChangeNumberProductState());
+      emit(PlantsChangeNumberProductState());
+    }
+    emit(PlantsChangeNumberProductState());
+    emit(PlantsChangeNumberProductState());
+    emit(PlantsChangeNumberProductState());
+  }
+
   void getPlantsData() {
     emit(PlantsLoadingState());
     DioHelper.getData(
@@ -366,6 +410,11 @@ class PlantsCubit extends Cubit<PlantsStates> {
       method: '',
     ).then((value) {
       plantsModel = PlantsModel.fromJson(value.data);
+      plantsModel!.data!.forEach((element) {
+        debugPrint(
+            'element ID : ${element.plantId}  element name : ${element.name}');
+        numberProduct.addAll({element.plantId.toString(): 1});
+      });
       print('Plant Data : ${plantsModel!.data![1].description}');
       emit(PlantsSuccessState());
     }).catchError((error) {
@@ -381,6 +430,28 @@ class ToolsCubit extends Cubit<ToolsStates> {
   static ToolsCubit get(context) => BlocProvider.of(context);
   ToolsModel? toolsModel;
 
+  Map<String, int> numberProductTools = {};
+  int counter = 1;
+
+  void increaseNumberProduct(String? id) {
+    numberProductTools[id.toString()] =
+        (numberProductTools[id.toString()]! + 1);
+    emit(ToolsChangeNumberProductState());
+    emit(ToolsChangeNumberProductState());
+    emit(ToolsChangeNumberProductState());
+  }
+
+  void decreaseNumberProduct(String? id) {
+    if (numberProductTools[id.toString()]! > 1) {
+      numberProductTools[id.toString()] =
+          (numberProductTools[id.toString()]! - 1);
+      emit(ToolsChangeNumberProductState());
+      emit(ToolsChangeNumberProductState());
+    }
+    emit(ToolsChangeNumberProductState());
+    emit(ToolsChangeNumberProductState());
+  }
+
   void getToolsData() {
     emit(ToolsLoadingState());
     DioHelper.getData(
@@ -388,6 +459,11 @@ class ToolsCubit extends Cubit<ToolsStates> {
       method: '',
     ).then((value) {
       toolsModel = ToolsModel.fromJson(value.data);
+      toolsModel!.data!.forEach((element) {
+        debugPrint(
+            'element ID : ${element.toolId}  element name : ${element.name}');
+        numberProductTools.addAll({element.toolId.toString(): counter});
+      });
       print('Toolss Data : ${toolsModel!.data![1].description}');
       emit(ToolsSuccessState());
     }).catchError((error) {
@@ -402,17 +478,21 @@ class ProductsCubit extends Cubit<ProductsStates> {
 
   static ProductsCubit get(context) => BlocProvider.of(context);
   ProductsModel? productsModel;
-  Map<String, int> numberProduct = {};
+
+  Map<String, int> numberProductProducts = {};
   int counter = 1;
 
   void increaseNumberProduct(String? id) {
-    numberProduct[id.toString()] = (numberProduct[id.toString()]! + 1);
+    numberProductProducts[id.toString()] =
+        (numberProductProducts[id.toString()]! + 1);
+
     emit(ProductsChangeNumberProductState());
   }
 
   void decreaseNumberProduct(String? id) {
-    if (numberProduct[id.toString()]! > 1) {
-      numberProduct[id.toString()] = (numberProduct[id.toString()]! - 1);
+    if (numberProductProducts[id.toString()]! > 1) {
+      numberProductProducts[id.toString()] =
+          (numberProductProducts[id.toString()]! - 1);
     }
     emit(ProductsChangeNumberProductState());
   }
@@ -424,11 +504,11 @@ class ProductsCubit extends Cubit<ProductsStates> {
       method: '',
     ).then((value) {
       productsModel = ProductsModel.fromJson(value.data);
-
       productsModel!.data!.forEach((element) {
-        numberProduct.addAll({element.productId.toString(): counter});
+        numberProductProducts.addAll({element.productId.toString(): counter});
+        debugPrint(
+            'element ID : ${element.productId}  element name : ${element.name}');
       });
-      print('Product Data : ${productsModel!.data![1].description}');
       emit(ProductsSuccessState());
     }).catchError((error) {
       emit(ProductsErrorState());
@@ -578,14 +658,17 @@ class ForumsCubit extends Cubit<ForumsStates> {
 
   void getSearch(String? id) {
     emit(ForumsSearchLoadingState());
-    DioHelper.getData(endPoint: forums, method: '/{forumId}').then((value) {
-      forumsModel = ForumsModel.fromJson(value.data);
+    DioHelper.getData(
+        endPoint: forums,
+        method: '',
+        query: {'search': 'My First Post'}).then((value) {
+      // forumsModel = ForumsModel.fromJson(value.data);
       //search!.add(forumsModel!);
       dataForums = DataForums.fromJson(value.data);
-      print('Search forumId : ${dataForums!.user!.firstName}');
+      //print('Search forumId : ${dataForums?.user!.firstName}');
       emit(ForumsSearchSuccessState());
     }).onError((error, stackTrace) {
-      debugPrint('Error data: $error');
+      debugPrint('Error data: $error $stackTrace');
       emit(ForumsSearchErrorState());
     });
   }
@@ -773,6 +856,7 @@ class MyForumsCubit extends Cubit<MyForumsStates> {
   static MyForumsCubit get(context) => BlocProvider.of(context);
 
   ForumsModel? forumsModel;
+  Map<String, bool> likeList = {};
 
   void getMyForumsData() {
     emit(MyForumsLoadingState());
@@ -781,7 +865,10 @@ class MyForumsCubit extends Cubit<MyForumsStates> {
       method: '/me',
     ).then((value) {
       forumsModel = ForumsModel.fromJson(value.data);
-      print('Forums me Data : ${forumsModel!.data![1].description}');
+      forumsModel!.data!.forEach((element) {
+        likeList = {'${element.forumId}': false};
+      });
+
       emit(MyForumsSuccessState());
     }).catchError((error) {
       emit(MyForumsErrorState());
@@ -790,8 +877,9 @@ class MyForumsCubit extends Cubit<MyForumsStates> {
   }
 
   void makeLikePost(String? id) {
-    ///api/v1/forums/{forumId}/like
-    DioHelper.postData(endPoint: forums, method: '/$id/like').then((value) {
+    DioHelper.postData(endPoint: forums, method: '/$id/like', data: null)
+        .then((value) {
+      likeList={id!: true};
       emit(MyForumsLikeSuccessState());
     }).catchError((error) {
       debugPrint("error : ${error.toString()}");

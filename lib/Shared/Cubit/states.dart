@@ -37,6 +37,7 @@ class SeedsInitialState extends SeedsStates {}
 class SeedsLoadingState extends SeedsStates {}
 class SeedsSuccessState extends SeedsStates {}
 class SeedsErrorState extends SeedsStates {}
+class SeedsChangeNumberProductState extends SeedsStates {}
 
 
 abstract class PlantsStates{}
@@ -44,6 +45,7 @@ class PlantsInitialState extends PlantsStates {}
 class PlantsLoadingState extends PlantsStates {}
 class PlantsSuccessState extends PlantsStates {}
 class PlantsErrorState extends PlantsStates {}
+class PlantsChangeNumberProductState extends PlantsStates {}
 
 
 abstract class ToolsStates{}
@@ -51,6 +53,8 @@ class ToolsInitialState extends ToolsStates {}
 class ToolsLoadingState extends ToolsStates {}
 class ToolsSuccessState extends ToolsStates {}
 class ToolsErrorState extends ToolsStates {}
+class ToolsChangeNumberProductState extends ToolsStates{}
+
 
 
 abstract class ProductsStates{}
