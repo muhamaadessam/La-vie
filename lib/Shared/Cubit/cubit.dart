@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+//import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:la_vie/Models/blogs_model.dart';
@@ -13,12 +17,14 @@ import 'package:la_vie/Shared/Network/Remote/constant.dart';
 import 'package:la_vie/Shared/Network/Remote/dio_helper.dart';
 import 'package:la_vie/presentation/screens/Blogs/blogs_screen.dart';
 import 'package:la_vie/presentation/screens/NotificationScreens/notifications.dart';
+import 'package:toast/toast.dart';
 import '../../Models/plantsModel.dart';
 import '../../Models/product_model.dart';
 import '../../Models/toolsModel.dart';
 import '../../Models/user_model.dart';
 import '../../presentation/Components/navigation_bar.dart';
 import '../../presentation/screens/HomeScreen/home_screen.dart';
+import '../../presentation/screens/ProductScreen/productScreen.dart';
 import '../../presentation/screens/Profile/profile_screen.dart';
 import '../../presentation/screens/QRCodeScreen/qr_code_screen.dart';
 import 'package:la_vie/Models/signup_model.dart';
@@ -47,34 +53,133 @@ class AppCubit extends Cubit<AppState> {
   }
 
   String scanBarcode = 'Unknown';
-  PlantsModel? plantsModel;
+  PlantData? plantsModel;
+  String? plantId;
+  String? name;
+  String? description;
+  String? imageUrl;
+  int? waterCapacity;
+  int? sunLight;
+  int? temperature;
+  Map<String, dynamic>? json;
 
-  Future<void> scanQR() async {
+  Future<void> scanQR(context) async {
+    ToastContext().init(context);
     emit(QRLoadingState());
+    json = {};
     String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ffffff', 'Cancel', false, ScanMode.QR);
-      //barcodeScanRes = result
+    barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+        '#ffffff', 'Cancel', false, ScanMode.QR);
+    //barcodeScanRes = result
+    if (barcodeScanRes != '-1') {
       DioHelper.getData(
           endPoint: plants,
           method: '{plantId}',
           query: {'plantId': barcodeScanRes}).then((value) {
-        plantsModel = PlantsModel.fromJson(value.data);
-        //debugPrint('Plant id : ${plantsModel!.data![0].plantId}');
+        json = value.data;
+        plantId = json!['data'][0]['plantId'];
+        name = json!['data'][0]['name'];
+        description = json!['data'][0]['description'];
+        imageUrl =
+            'https://lavie.orangedigitalcenteregypt.com${json!['data'][0]['imageUrl']}';
+        waterCapacity = json!['data'][0]['waterCapacity'];
+        sunLight = json!['data'][0]['sunLight'];
+        temperature = json!['data'][0]['temperature'];
         scanBarcode = barcodeScanRes;
         debugPrint('barcodeScanRes: $barcodeScanRes');
+        debugPrint('json product: ${json!}');
+        debugPrint('id product: ${json!['data'][0]['plantId']}');
+
+        plantId != null
+            ? showDialog(
+                context: context,
+                builder: (context) => Padding(
+                  padding: const EdgeInsets.only(
+                      right: 50, left: 50, top: 640, bottom: 150),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(.6),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    width: double.infinity,
+                    height: 100,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              //  qr.plantsModel!.data!.isEmpty ?const CircularProgressIndicator() :
+                              Text(
+                                '$name',
+                                style: textStyle(
+                                  color: Colors.black,
+                                  size: 16,
+                                  weight: FontWeight.w600,
+                                ),
+                              ),
+                              //  (qr.plantsModel!.data!.isEmpty) ?const CircularProgressIndicator() :
+                              Text(
+                                '$description',
+                                style: textStyle(
+                                  color: Colors.black,
+                                  size: 14,
+                                  weight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductScreen(
+                                    name: name!,
+                                    description: description!,
+                                    imageUrl: imageUrl!,
+                                    waterCapacity: waterCapacity!,
+                                    sunLight: sunLight!,
+                                    temperature: temperature!,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: primaryColor,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: const Icon(
+                                Icons.arrow_forward_sharp,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : Toast.show("Toast plugin app",
+                duration: Toast.lengthShort, gravity: Toast.bottom);
+
         emit(QRSuccessState());
-      }).catchError((error){
+      }).catchError((error) {
         debugPrint('error her :${error.toString()}');
         emit(QRErrorState());
       });
-      scanBarcode = barcodeScanRes;
-      debugPrint('barcodeScanRes: $barcodeScanRes');
-      emit(AppChangeBottomNavBarState());
-    }catch(e) {
-     debugPrint('error her :${e.toString()}');
-    }
+    } else {}
+    //emit(AppChangeBottomNavBarState());
   }
 }
 
@@ -467,22 +572,25 @@ class ForumsCubit extends Cubit<ForumsStates> {
   static ForumsCubit get(context) => BlocProvider.of(context);
 
   ForumsModel? forumsModel;
-  List<ForumsModel>? search = [];
 
-  File? image;
+  //List<ForumsModel>? search = [];
+  DataForums? dataForums;
 
   void getSearch(String? id) {
     emit(ForumsSearchLoadingState());
-    DioHelper.getData(endPoint: forums, method: '/$id').then((value) {
+    DioHelper.getData(endPoint: forums, method: '/{forumId}').then((value) {
       forumsModel = ForumsModel.fromJson(value.data);
-      search!.add(forumsModel!);
-      print('Search forumId : ${value.data['data']['forumId']}');
+      //search!.add(forumsModel!);
+      dataForums = DataForums.fromJson(value.data);
+      print('Search forumId : ${dataForums!.user!.firstName}');
       emit(ForumsSearchSuccessState());
     }).onError((error, stackTrace) {
       debugPrint('Error data: $error');
       emit(ForumsSearchErrorState());
     });
   }
+
+  File? image;
 
   Future pickImage(ImageSource source) async {
     try {
@@ -683,6 +791,26 @@ class MyForumsCubit extends Cubit<MyForumsStates> {
 
   void makeLikePost(String? id) {
     ///api/v1/forums/{forumId}/like
-    DioHelper.postData(endPoint: forums, method: '/$id/like', data: {});
+    DioHelper.postData(endPoint: forums, method: '/$id/like').then((value) {
+      emit(MyForumsLikeSuccessState());
+    }).catchError((error) {
+      debugPrint("error : ${error.toString()}");
+      emit(MyForumsLikeErrorState());
+    });
+  }
+
+  void makeCommentPost(String? id, String? comment) {
+    DioHelper.postData(
+      endPoint: forums,
+      method: '/$id/comment',
+      data: {
+        'comment': comment,
+      },
+    ).then((value) {
+      emit(MyForumsLikeSuccessState());
+    }).catchError((error) {
+      debugPrint("error : ${error.toString()}");
+      emit(MyForumsLikeErrorState());
+    });
   }
 }

@@ -3,12 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:la_vie/Models/forums_model.dart';
 import 'package:la_vie/Shared/Cubit/cubit.dart';
 import 'package:la_vie/Shared/Cubit/states.dart';
-import 'package:la_vie/presentation/screens/Forum/post.dart';
-
 import '../../../Shared/Constant/colors.dart';
 import '../../../Shared/Constant/images.dart';
 import '../../../Shared/Constant/text.dart';
-import '../HomeScreen/search_bar.dart';
 
 class ForumsSearch extends StatelessWidget {
   const ForumsSearch({Key? key}) : super(key: key);
@@ -50,9 +47,13 @@ class ForumsSearch extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                   child: TextFormField(
-                    onChanged: (value) {
-                      forumsCubit.getSearch(value);
-                      debugPrint(value.toString());
+                    // onChanged: (value) {
+                    //   forumsCubit.getSearch('3b170c06-101f-4624-801c-9d4c8040d59a');
+                    //   debugPrint(value.toString());
+                    // },
+                    onSaved: (value){
+                      forumsCubit.getSearch('3b170c06-101f-4624-801c-9d4c8040d59a');
+                        debugPrint(value.toString());
                     },
                     controller: searchController,
                     decoration: InputDecoration(
@@ -73,7 +74,7 @@ class ForumsSearch extends StatelessWidget {
                     },
                   ),
                 ),
-                forumsCubit.search == null
+                forumsCubit.dataForums == null
                     ? const CircularProgressIndicator()
                     : Column(
                         children: [
@@ -133,7 +134,7 @@ class ForumsSearch extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          forumsCubit.search![0].data![0].title!,
+                                          forumsCubit.dataForums!.title!,
                                           style: textStyle(
                                             weight: FontWeight.w700,
                                             size: 18,
@@ -141,7 +142,7 @@ class ForumsSearch extends StatelessWidget {
                                           ),
                                         ),
                                         Text(
-                                          forumsCubit.search![0].data![0].description!,
+                                          forumsCubit.dataForums!.description!,
                                           style: textStyle(
                                             weight: FontWeight.w400,
                                             size: 15,
@@ -154,10 +155,10 @@ class ForumsSearch extends StatelessWidget {
                                   ),
                                   SizedBox(
                                     width: double.infinity,
-                                    child: forumsCubit.search![0].data![0].imageUrl! !=
+                                    child: forumsCubit.dataForums!.imageUrl! !=
                                             'https://lavie.orangedigitalcenteregypt.comnull'
                                         ? Image(
-                                            image: NetworkImage(forumsCubit.search![0].data![0].imageUrl!),
+                                            image: NetworkImage(forumsCubit.dataForums!.imageUrl!),
                                             width: double.infinity,
                                           )
                                         : Image.asset(
@@ -184,7 +185,7 @@ class ForumsSearch extends StatelessWidget {
                                                 width: 18,
                                               ),
                                               Text(
-                                                '  ${forumsCubit.search![0].data![0].forumLikes!.length} Like',
+                                                '  ${forumsCubit.dataForums!.forumLikes!.length} Like',
                                                 style: textStyle(
                                                   color: const Color.fromRGBO(
                                                       0, 0, 0, .6),
@@ -197,7 +198,7 @@ class ForumsSearch extends StatelessWidget {
                                           flex: 1,
                                         ),
                                         Text(
-                                          '${forumsCubit.search![0].data![0].forumComments!.length} Replies',
+                                          '${forumsCubit.dataForums!.forumComments!.length} Replies',
                                           style: textStyle(
                                             color: const Color.fromRGBO(
                                                 0, 00, 0, .6),

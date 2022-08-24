@@ -5,6 +5,7 @@ import 'package:la_vie/Shared/Constant/text.dart';
 import 'package:la_vie/Shared/Cubit/cubit.dart';
 import 'package:la_vie/Shared/Cubit/states.dart';
 import 'package:la_vie/presentation/screens/Forum/create_new_post.dart';
+import 'package:la_vie/presentation/screens/Forum/forum_search.dart';
 import 'package:la_vie/presentation/screens/Forum/post.dart';
 import 'package:la_vie/presentation/screens/HomeScreen/search_bar.dart';
 
@@ -48,6 +49,18 @@ class ForumScreen extends StatelessWidget {
               style: textStyle(
                   color: Colors.black, weight: FontWeight.w700, size: 21),
             ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const ForumsSearch()));
+                },
+                icon: const Icon(
+                  Icons.search,
+                  color: Colors.black,
+                ),
+              ),
+            ],
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -112,8 +125,7 @@ class ForumScreen extends StatelessWidget {
                       const SizedBox(
                         height: 16,
                       ),
-                              forums.forumsModel == null ||
-                              myForums.forumsModel == null
+                      forums.forumsModel == null || myForums.forumsModel == null
                           ? const Center(child: CircularProgressIndicator())
                           : SizedBox(
                               width: double.infinity,

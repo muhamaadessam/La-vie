@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:la_vie/Shared/Network/Local/cash_helper.dart';
 import 'package:la_vie/Shared/Network/Remote/dio_helper.dart';
 import 'package:la_vie/presentation/screens/SplashScreen/splash_screen.dart';
-
+import 'package:toast/toast.dart';
 import 'Shared/Cubit/cubit.dart';
 import 'Shared/Cubit/cubit_observer.dart';
 import 'Shared/Cubit/states.dart';

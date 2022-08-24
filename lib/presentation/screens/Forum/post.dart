@@ -4,6 +4,7 @@ import 'package:la_vie/Shared/Constant/colors.dart';
 import 'package:la_vie/Shared/Constant/images.dart';
 import 'package:la_vie/Shared/Constant/text.dart';
 import 'package:la_vie/Shared/Cubit/cubit.dart';
+import 'package:la_vie/presentation/screens/Registration/components.dart';
 
 class Post extends StatelessWidget {
   const Post({
@@ -21,13 +22,15 @@ class Post extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController();
+    var formKey = GlobalKey<FormState>();
     ForumsCubit forums = ForumsCubit.get(context);
     MyForumsCubit myForums = MyForumsCubit.get(context);
-    ImageProvider? imageProvider;
-    forumsModel.data![index].imageUrl !=
-            'https://lavie.orangedigitalcenteregypt.comnull'
-        ? imageProvider = NetworkImage(forumsModel.data![index].imageUrl!)
-        : imageProvider = AssetImage('${imageAsset}profile.png');
+    ImageProvider? imageProviderProfile;
+    forumsModel.data![index].user!.imageUrl != ''
+        ? imageProviderProfile =
+            NetworkImage(forumsModel.data![index].user!.imageUrl!)
+        : imageProviderProfile = AssetImage('${imageAsset}profile.png');
     return Column(
       children: [
         Container(
@@ -47,7 +50,7 @@ class Post extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 25,
-                        backgroundImage: imageProvider,
+                        backgroundImage: imageProviderProfile,
                       ),
                       const SizedBox(
                         width: 8,
@@ -55,9 +58,15 @@ class Post extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Name',
-                            style: textStyle(weight: FontWeight.w700, size: 16),
+                          SizedBox(
+                            width: 280,
+                            child: Text(
+                              "${forumsModel.data![index].user!.firstName!} ${forumsModel.data![index].user!.lastName!}",
+                              style:
+                                  textStyle(weight: FontWeight.w700, size: 16),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           Text(
                             'Time',
@@ -116,8 +125,8 @@ class Post extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () {
-                          myForums.makeLikePost(
-                              forumsModel.data![index].forumId!);
+                          myForums
+                              .makeLikePost(forumsModel.data![index].forumId!);
                           debugPrint(
                               myForums.forumsModel!.data![index].forumId!);
                         },
@@ -139,10 +148,100 @@ class Post extends StatelessWidget {
                       const Spacer(
                         flex: 1,
                       ),
-                      Text(
-                        '${forumsModel.data![index].forumComments!.length} Replies',
-                        style: textStyle(
-                          color: const Color.fromRGBO(0, 00, 0, .6),
+                      InkWell(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Form(
+                                  key: formKey,
+                                  child: SizedBox(
+                                    height: 200,
+                                    child: AlertDialog(
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(15.0),
+                                        ),
+                                      ),
+                                      title: Text(
+                                        'Add Comment',
+                                        style: textStyle(
+                                          color: primaryColor,
+                                          size: 20,
+                                          weight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      content: TextFormField(
+                                        keyboardType: TextInputType.text,
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'Entre your Comment';
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        controller: controller,
+                                        maxLines: 1,
+                                        cursorColor: primaryColor,
+                                        decoration: InputDecoration(
+                                          //label: Text('Comment'),
+                                          labelText: 'Comment',
+                                          labelStyle: textStyle(color: primaryColor),
+                                          focusColor: primaryColor,
+                                          focusedBorder:OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(5),
+                                            borderSide: BorderSide(
+                                              color: primaryColor,
+                                            ),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(5),
+                                            borderSide: const BorderSide(
+                                              color: Color.fromRGBO(147, 147, 147, 1),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      /*CustomTextFormField(
+                                          title: 'Comment',
+                                          isPassword: false,
+                                          controller: controller,
+                                          validation: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Entre your Comment';
+                                            } else {
+                                              return null;
+                                            }
+                                          }),*/
+                                      actions: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            if (formKey.currentState!
+                                                .validate()) {
+                                              myForums.makeCommentPost(
+                                                  forumsModel
+                                                      .data![index].forumId!,
+                                                  controller.text);
+                                              Navigator.pop(context);
+                                            }
+                                          },
+                                          child: Text(
+                                            'Comment',
+                                            style: textStyle(
+                                                color: Colors.white, size: 16),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              });
+                        },
+                        child: Text(
+                          '${forumsModel.data![index].forumComments!.length} Replies',
+                          style: textStyle(
+                            color: const Color.fromRGBO(0, 00, 0, .6),
+                          ),
                         ),
                       ),
                       const Spacer(

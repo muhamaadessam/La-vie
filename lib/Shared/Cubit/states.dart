@@ -108,3 +108,7 @@ class MyForumsInitialState extends MyForumsStates {}
 class MyForumsLoadingState extends MyForumsStates {}
 class MyForumsSuccessState extends MyForumsStates {}
 class MyForumsErrorState extends MyForumsStates {}
+class MyForumsLikeSuccessState extends MyForumsStates {}
+class MyForumsLikeErrorState extends MyForumsStates {}
+class MyForumsCommentSuccessState extends MyForumsStates {}
+class MyForumsCommentErrorState extends MyForumsStates {}

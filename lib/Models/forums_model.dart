@@ -1,7 +1,7 @@
 class ForumsModel {
   String? type;
   String? message;
-  List<Data>? data;
+  List<DataForums>? data;
 
   ForumsModel({this.type, this.message, this.data});
 
@@ -9,25 +9,15 @@ class ForumsModel {
     type = json['type'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <DataForums>[];
       json['data'].forEach((v) {
-        data!.add( Data.fromJson(v));
+        data!.add(DataForums.fromJson(v));
       });
     }
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
-    data['type'] = type;
-    data['message'] = message;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
 }
 
-class Data {
+class DataForums {
   String? forumId;
   String? title;
   String? description;
@@ -35,17 +25,19 @@ class Data {
   String? userId;
   List<ForumLikes>? forumLikes;
   List<ForumComments>? forumComments;
+  User? user;
 
-  Data(
+  DataForums(
       {this.forumId,
-        this.title,
-        this.description,
-        this.imageUrl,
-        this.userId,
-        this.forumLikes,
-        this.forumComments});
+      this.title,
+      this.description,
+      this.imageUrl,
+      this.userId,
+      this.forumLikes,
+      this.forumComments,
+      this.user});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataForums.fromJson(Map<String, dynamic> json) {
     forumId = json['forumId'];
     title = json['title'];
     description = json['description'];
@@ -63,23 +55,7 @@ class Data {
         forumComments!.add(ForumComments.fromJson(v));
       });
     }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['forumId'] = forumId;
-    data['title'] = title;
-    data['description'] = description;
-    data['imageUrl'] = imageUrl;
-    data['userId'] = userId;
-    if (forumLikes != null) {
-      data['ForumLikes'] = forumLikes!.map((v) => v.toJson()).toList();
-    }
-    if (forumComments != null) {
-      data['ForumComments'] =
-          forumComments!.map((v) => v.toJson()).toList();
-    }
-    return data;
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
   }
 }
 
@@ -93,13 +69,6 @@ class ForumLikes {
     forumId = json['forumId'];
     userId = json['userId'];
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['forumId'] = forumId;
-    data['userId'] = userId;
-    return data;
-  }
 }
 
 class ForumComments {
@@ -111,10 +80,10 @@ class ForumComments {
 
   ForumComments(
       {this.forumCommentId,
-        this.forumId,
-        this.userId,
-        this.comment,
-        this.createdAt});
+      this.forumId,
+      this.userId,
+      this.comment,
+      this.createdAt});
 
   ForumComments.fromJson(Map<String, dynamic> json) {
     forumCommentId = json['forumCommentId'];
@@ -123,14 +92,18 @@ class ForumComments {
     comment = json['comment'];
     createdAt = json['createdAt'];
   }
+}
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['forumCommentId'] = forumCommentId;
-    data['forumId'] = forumId;
-    data['userId'] = userId;
-    data['comment'] = comment;
-    data['createdAt'] = createdAt;
-    return data;
+class User {
+  String? firstName;
+  String? lastName;
+  String? imageUrl;
+
+  User({this.firstName, this.lastName, this.imageUrl});
+
+  User.fromJson(Map<String, dynamic> json) {
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    imageUrl = json['imageUrl'];
   }
 }
