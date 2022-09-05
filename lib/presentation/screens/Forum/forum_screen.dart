@@ -16,6 +16,7 @@ class ForumScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     ScrollController listScrollController = ScrollController();
     ScrollController singleScrollController = ScrollController();
+    String searchController = '';
     ForumsCubit forums = ForumsCubit.get(context);
     MyForumsCubit myForums = MyForumsCubit.get(context);
     forums.getForumsData();
@@ -48,18 +49,6 @@ class ForumScreen extends StatelessWidget {
               style: textStyle(
                   color: Colors.black, weight: FontWeight.w700, size: 21),
             ),
-            // actions: [
-            //   IconButton(
-            //     onPressed: () {
-            //       Navigator.push(context,
-            //           MaterialPageRoute(builder: (context) => const ForumsSearch()));
-            //     },
-            //     icon: const Icon(
-            //       Icons.search,
-            //       color: Colors.black,
-            //     ),
-            //   ),
-            // ],
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -75,7 +64,27 @@ class ForumScreen extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
-                const SearchBar(),
+                forums.isAll!
+                    ? Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: TextFormField(
+                          onChanged: (value) {
+                            searchController = value;
+                            forums.getForumsDataBySearch(value: value);
+                          },
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.search),
+                            hintText: 'Search',
+                            fillColor: const Color.fromRGBO(248, 248, 248, 1),
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -149,10 +158,11 @@ class ForumScreen extends StatelessWidget {
                                       const SizedBox(
                                         height: 16,
                                       ),
-                                  itemCount:
-                                      forums.isAll!
-                                          ? forums.forumsModel!.data!.length
-                                          : myForums.forumsModel!.data!.length),
+                                  itemCount: forums.isAll!
+                                      ? (forums.forumsModel!.data!.length) > 8
+                                          ? 20
+                                          : forums.forumsModel!.data!.length
+                                      : myForums.forumsModel!.data!.length),
                             ),
                     ],
                   ),

@@ -6,7 +6,6 @@ import 'package:la_vie/Shared/Constant/text.dart';
 import 'package:la_vie/Shared/Cubit/cubit.dart';
 import 'package:la_vie/Shared/Cubit/states.dart';
 import 'package:la_vie/Shared/Network/Local/cash_helper.dart';
-import 'package:la_vie/presentation/screens/Exam/qustion_screen.dart';
 import 'package:la_vie/presentation/screens/Profile/background_profile.dart';
 import 'package:la_vie/presentation/screens/Profile/components.dart';
 

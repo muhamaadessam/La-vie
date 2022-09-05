@@ -1,11 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-//import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:la_vie/Models/blogs_model.dart';
@@ -102,69 +98,74 @@ class AppCubit extends Cubit<AppState> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     width: double.infinity,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
                     height: 100,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              //  qr.plantsModel!.data!.isEmpty ?const CircularProgressIndicator() :
-                              Text(
-                                '$name',
-                                style: textStyle(
-                                  color: Colors.black,
-                                  size: 16,
-                                  weight: FontWeight.w600,
-                                ),
-                              ),
-                              //  (qr.plantsModel!.data!.isEmpty) ?const CircularProgressIndicator() :
-                              Text(
-                                '$description',
-                                style: textStyle(
-                                  color: Colors.black,
-                                  size: 14,
-                                  weight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProductScreen(
-                                    name: name!,
-                                    description: description!,
-                                    imageUrl: imageUrl!,
-                                    waterCapacity: waterCapacity!,
-                                    sunLight: sunLight!,
-                                    temperature: temperature!,
+                    child: Scaffold(
+                      body: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                //  qr.plantsModel!.data!.isEmpty ?const CircularProgressIndicator() :
+                                Text(
+                                  '$name',
+                                  style: textStyle(
+                                    color: Colors.black,
+                                    size: 16,
+                                    weight: FontWeight.w600,
                                   ),
                                 ),
-                              );
-                            },
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: primaryColor,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: const Icon(
-                                Icons.arrow_forward_sharp,
-                                color: Colors.white,
+                                //  (qr.plantsModel!.data!.isEmpty) ?const CircularProgressIndicator() :
+                                Text(
+                                  '$description',
+                                  style: textStyle(
+                                    color: Colors.black,
+                                    size: 14,
+                                    weight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ProductScreen(
+                                      name: name!,
+                                      description: description!,
+                                      imageUrl: imageUrl!,
+                                      waterCapacity: waterCapacity!,
+                                      sunLight: sunLight!,
+                                      temperature: temperature!,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: primaryColor,
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: const Icon(
+                                  Icons.arrow_forward_sharp,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -653,7 +654,6 @@ class ForumsCubit extends Cubit<ForumsStates> {
 
   ForumsModel? forumsModel;
 
-  //List<ForumsModel>? search = [];
   DataForums? dataForums;
 
   void getSearch(String? id) {
@@ -673,7 +673,187 @@ class ForumsCubit extends Cubit<ForumsStates> {
     });
   }
 
+  void getForumsData() {
+    emit(ForumsLoadingState());
+    DioHelper.getData(
+      endPoint: forums,
+      method: '',
+    ).then((value) {
+      forumsModel = ForumsModel.fromJson(value.data);
+      print('Forums Data : ${forumsModel!.data![1].description}');
+      emit(ForumsSuccessState());
+    }).catchError((error) {
+      emit(ForumsErrorState());
+      print('Forums error: ${error.toString()}');
+    });
+  }
+
+  void getForumsDataBySearch({String? value}) {
+    emit(ForumsLoadingState());
+    DioHelper.getData(endPoint: forums, method: '', query: {'search': value})
+        .then((value) {
+      forumsModel = ForumsModel.fromJson(value.data);
+      print('Forums Data : ${forumsModel!.data![1].description}');
+      emit(ForumsSuccessState());
+    }).catchError((error) {
+      emit(ForumsErrorState());
+      print('Forums error: ${error.toString()}');
+    });
+  }
+
+  ButtonStyle? buttonStyle1 = ButtonStyle(
+    side: MaterialStateProperty.resolveWith(
+      (states) => BorderSide(
+        color: Colors.black.withOpacity(.13),
+      ),
+    ),
+    elevation: MaterialStateProperty.resolveWith((states) => 0),
+    backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
+  );
+  ButtonStyle? buttonStyle2 = ButtonStyle(
+    elevation: MaterialStateProperty.resolveWith((states) => 0),
+  );
+  TextStyle? textStyle1 = textStyle(
+    color: Colors.grey[400],
+    weight: FontWeight.w500,
+    size: 12,
+  );
+  TextStyle? textStyle2 = textStyle(
+    color: Colors.white,
+    weight: FontWeight.w500,
+    size: 12,
+  );
+
+  bool? isAll = true;
+  Map<String, bool> likeList = {};
+
+  void changeForumsData(bool forumsIsAll) {
+    isAll = forumsIsAll;
+    if (!forumsIsAll) {
+      buttonStyle1 = ButtonStyle(
+        elevation: MaterialStateProperty.resolveWith((states) => 0),
+      );
+      buttonStyle2 = ButtonStyle(
+        side: MaterialStateProperty.resolveWith(
+          (states) => BorderSide(
+            color: Colors.black.withOpacity(.13),
+          ),
+        ),
+        elevation: MaterialStateProperty.resolveWith((states) => 0),
+        backgroundColor:
+            MaterialStateColor.resolveWith((states) => Colors.white),
+      );
+      textStyle1 = textStyle(
+        color: Colors.white,
+        weight: FontWeight.w500,
+        size: 12,
+      );
+      textStyle2 = textStyle(
+        color: Colors.grey[400],
+        weight: FontWeight.w500,
+        size: 12,
+      );
+    } else {
+      buttonStyle2 = ButtonStyle(
+        elevation: MaterialStateProperty.resolveWith((states) => 0),
+      );
+      buttonStyle1 = ButtonStyle(
+        side: MaterialStateProperty.resolveWith(
+          (states) => BorderSide(
+            color: Colors.black.withOpacity(.13),
+          ),
+        ),
+        elevation: MaterialStateProperty.resolveWith((states) => 0),
+        backgroundColor:
+            MaterialStateColor.resolveWith((states) => Colors.white),
+      );
+
+      textStyle2 = textStyle(
+        color: Colors.white,
+        weight: FontWeight.w500,
+        size: 12,
+      );
+      textStyle1 = textStyle(
+        color: Colors.grey[400],
+        weight: FontWeight.w500,
+        size: 12,
+      );
+    }
+    emit(ForumsChangeFromAllToMeState());
+  }
+  bool? lik = false;
+  void makeLikePost(String? id) {
+    DioHelper.postData(endPoint: forums, method: '/$id/like', data: null)
+        .then((value) {
+      likeList = {id!: true};
+      getForumsData();
+      emit(ForumsLikeSuccessState());
+    }).catchError((error) {
+      debugPrint("error : ${error.toString()}");
+      emit(ForumsLikeErrorState());
+    });
+  }
+
+  void makeCommentPost(String? id, String? comment) {
+    DioHelper.postData(
+      endPoint: forums,
+      method: '/$id/comment',
+      data: {
+        'comment': comment,
+      },
+    ).then((value) {
+      getForumsData();
+      emit(ForumsLikeSuccessState());
+    }).catchError((error) {
+      debugPrint("error : ${error.toString()}");
+      emit(ForumsLikeErrorState());
+    });
+  }
+}
+
+class MyForumsCubit extends Cubit<MyForumsStates> {
+  MyForumsCubit() : super(MyForumsInitialState());
+
+  static MyForumsCubit get(context) => BlocProvider.of(context);
   File? image;
+  ForumsModel? forumsModel;
+  Map<String, bool> likeList = {};
+
+  void getMyForumsData() {
+    emit(MyForumsLoadingState());
+    DioHelper.getData(
+      endPoint: forums,
+      method: '/me',
+    ).then((value) {
+      forumsModel = ForumsModel.fromJson(value.data);
+      forumsModel!.data!.forEach((element) {
+        likeList = {'${element.forumId}': false};
+      });
+
+      emit(MyForumsSuccessState());
+    }).catchError((error) {
+      emit(MyForumsErrorState());
+      print('Forums me error: ${error.toString()}');
+    });
+  }
+  void getMyForumsDataBySearch({String? value}) {
+    emit(MyForumsLoadingState());
+    DioHelper.getData(
+      endPoint: forums,
+      method: '/me',
+        query: {'search': value}
+    ).then((value) {
+      forumsModel = ForumsModel.fromJson(value.data);
+      forumsModel!.data!.forEach((element) {
+        likeList = {'${element.forumId}': false};
+      });
+
+      emit(MyForumsSuccessState());
+    }).catchError((error) {
+      emit(MyForumsErrorState());
+      print('Forums me error: ${error.toString()}');
+    });
+  }
 
   Future pickImage(ImageSource source) async {
     try {
@@ -747,6 +927,7 @@ class ForumsCubit extends Cubit<ForumsStates> {
       },
     ).then((value) {
       debugPrint("value : ${value.data}");
+      getMyForumsData();
       emit(ForumsAddPostSuccessState());
     }).catchError(
       (error) {
@@ -757,132 +938,11 @@ class ForumsCubit extends Cubit<ForumsStates> {
     );
   }
 
-  void getForumsData() {
-    emit(ForumsLoadingState());
-    DioHelper.getData(
-      endPoint: forums,
-      method: '',
-    ).then((value) {
-      forumsModel = ForumsModel.fromJson(value.data);
-      print('Forums Data : ${forumsModel!.data![1].description}');
-      emit(ForumsSuccessState());
-    }).catchError((error) {
-      emit(ForumsErrorState());
-      print('Forums error: ${error.toString()}');
-    });
-  }
-
-  ButtonStyle? buttonStyle1 = ButtonStyle(
-    side: MaterialStateProperty.resolveWith(
-      (states) => BorderSide(
-        color: Colors.black.withOpacity(.13),
-      ),
-    ),
-    elevation: MaterialStateProperty.resolveWith((states) => 0),
-    backgroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
-  );
-  ButtonStyle? buttonStyle2 = ButtonStyle(
-    elevation: MaterialStateProperty.resolveWith((states) => 0),
-  );
-  TextStyle? textStyle1 = textStyle(
-    color: Colors.grey[400],
-    weight: FontWeight.w500,
-    size: 12,
-  );
-  TextStyle? textStyle2 = textStyle(
-    color: Colors.white,
-    weight: FontWeight.w500,
-    size: 12,
-  );
-
-  bool? isAll = true;
-
-  void changeForumsData(bool forumsIsAll) {
-    isAll = forumsIsAll;
-    if (!forumsIsAll) {
-      buttonStyle1 = ButtonStyle(
-        elevation: MaterialStateProperty.resolveWith((states) => 0),
-      );
-      buttonStyle2 = ButtonStyle(
-        side: MaterialStateProperty.resolveWith(
-          (states) => BorderSide(
-            color: Colors.black.withOpacity(.13),
-          ),
-        ),
-        elevation: MaterialStateProperty.resolveWith((states) => 0),
-        backgroundColor:
-            MaterialStateColor.resolveWith((states) => Colors.white),
-      );
-      textStyle1 = textStyle(
-        color: Colors.white,
-        weight: FontWeight.w500,
-        size: 12,
-      );
-      textStyle2 = textStyle(
-        color: Colors.grey[400],
-        weight: FontWeight.w500,
-        size: 12,
-      );
-    } else {
-      buttonStyle2 = ButtonStyle(
-        elevation: MaterialStateProperty.resolveWith((states) => 0),
-      );
-      buttonStyle1 = ButtonStyle(
-        side: MaterialStateProperty.resolveWith(
-          (states) => BorderSide(
-            color: Colors.black.withOpacity(.13),
-          ),
-        ),
-        elevation: MaterialStateProperty.resolveWith((states) => 0),
-        backgroundColor:
-            MaterialStateColor.resolveWith((states) => Colors.white),
-      );
-
-      textStyle2 = textStyle(
-        color: Colors.white,
-        weight: FontWeight.w500,
-        size: 12,
-      );
-      textStyle1 = textStyle(
-        color: Colors.grey[400],
-        weight: FontWeight.w500,
-        size: 12,
-      );
-    }
-    emit(ForumsChangeFromAllToMeState());
-  }
-}
-
-class MyForumsCubit extends Cubit<MyForumsStates> {
-  MyForumsCubit() : super(MyForumsInitialState());
-
-  static MyForumsCubit get(context) => BlocProvider.of(context);
-
-  ForumsModel? forumsModel;
-  Map<String, bool> likeList = {};
-
-  void getMyForumsData() {
-    emit(MyForumsLoadingState());
-    DioHelper.getData(
-      endPoint: forums,
-      method: '/me',
-    ).then((value) {
-      forumsModel = ForumsModel.fromJson(value.data);
-      forumsModel!.data!.forEach((element) {
-        likeList = {'${element.forumId}': false};
-      });
-
-      emit(MyForumsSuccessState());
-    }).catchError((error) {
-      emit(MyForumsErrorState());
-      print('Forums me error: ${error.toString()}');
-    });
-  }
-
   void makeLikePost(String? id) {
     DioHelper.postData(endPoint: forums, method: '/$id/like', data: null)
         .then((value) {
       likeList = {id!: true};
+      getMyForumsData();
       emit(MyForumsLikeSuccessState());
     }).catchError((error) {
       debugPrint("error : ${error.toString()}");
@@ -898,6 +958,8 @@ class MyForumsCubit extends Cubit<MyForumsStates> {
         'comment': comment,
       },
     ).then((value) {
+      getMyForumsData();
+
       emit(MyForumsLikeSuccessState());
     }).catchError((error) {
       debugPrint("error : ${error.toString()}");

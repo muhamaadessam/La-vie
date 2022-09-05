@@ -19,6 +19,13 @@ class BottomBar extends StatelessWidget {
               child: Scaffold(
                 extendBody: true,
                 bottomNavigationBar: CurvedNavigationBar(
+                  letIndexChange: (index) {
+                    if (index != 1) {
+                      return true;
+                    }
+                    cubit.scanQR(context);
+                    return false;
+                  },
                   backgroundColor: Colors.transparent,
                   color: Colors.white,
                   buttonBackgroundColor: primaryColor,

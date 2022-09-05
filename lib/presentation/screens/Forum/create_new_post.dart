@@ -16,49 +16,11 @@ class CreatePost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ForumsCubit forums = ForumsCubit.get(context);
-/*
-    Future<ImageSource?> showImageSource(context) async {
-      return showModalBottomSheet(
-        context: context,
-        builder: (context) => Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-                leading: Icon(
-                  Icons.camera_alt,
-                  color: primaryColor,
-                ),
-                title: Text(
-                  'Camera',
-                  style: textStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  forums.pickImage(ImageSource.camera);
-                  Navigator.of(context).pop(ImageSource.camera);
-                }),
-            ListTile(
-                leading: Icon(
-                  Icons.image,
-                  color: primaryColor,
-                ),
-                title: Text(
-                  'Gallery',
-                  style: textStyle(color: Colors.black),
-                ),
-                onTap: () {
-                  forums.pickImage(ImageSource.gallery);
-                  Navigator.of(context).pop(ImageSource.camera);
-                }),
-          ],
-        ),
-      );
-    }
-*/
+    MyForumsCubit forums = MyForumsCubit.get(context);
     TextEditingController title = TextEditingController();
     TextEditingController description = TextEditingController();
     var formKey = GlobalKey<FormState>();
-    return BlocConsumer<ForumsCubit, ForumsStates>(
+    return BlocConsumer<MyForumsCubit, MyForumsStates>(
       listener: (context, state) => () {},
       builder: (context, state) => Scaffold(
         appBar: AppBar(

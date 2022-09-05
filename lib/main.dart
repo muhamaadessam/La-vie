@@ -1,11 +1,9 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:la_vie/Shared/Network/Local/cash_helper.dart';
 import 'package:la_vie/Shared/Network/Remote/dio_helper.dart';
 import 'package:la_vie/presentation/screens/SplashScreen/splash_screen.dart';
-import 'package:toast/toast.dart';
 import 'Shared/Cubit/cubit.dart';
 import 'Shared/Cubit/cubit_observer.dart';
 import 'Shared/Cubit/states.dart';
@@ -15,7 +13,7 @@ void main() {
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
   CashHelper.init();
- // CashHelper.put(key: 'Login',value: true);
+  CashHelper.put(key: 'Login',value: true);
   runApp(const MyApp());
 }
 
@@ -34,7 +32,8 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => SeedsCubit()..getSeedsData(),
         ),
         BlocProvider(
-          create: (BuildContext context) => SignInCubit()..signInModel.data!.accessToken,
+          create: (BuildContext context) =>
+              SignInCubit()..signInModel.data!.accessToken,
         ),
         BlocProvider(
           create: (BuildContext context) => ToolsCubit()..getToolsData(),
@@ -46,24 +45,28 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => PlantsCubit()..getPlantsData(),
         ),
         BlocProvider(
-          create: (BuildContext context) => UserCubit()..getUserData(method: 'me'),
+          create: (BuildContext context) =>
+              UserCubit()..getUserData(method: 'me'),
         ),
         BlocProvider(
           create: (BuildContext context) => CartCubit(),
         ),
         BlocProvider(
-          create: (BuildContext context) => ForumsCubit()..getForumsData()..getSearch('54'),
+          create: (BuildContext context) => ForumsCubit()
+            ..getForumsData()
+            ..getSearch('54'),
         ),
         BlocProvider(
           create: (BuildContext context) => MyForumsCubit()..getMyForumsData(),
         ),
         BlocProvider(
-          create: (BuildContext context) => BlogsCubit()..getBlogsData()..allBlogs,
+          create: (BuildContext context) => BlogsCubit()
+            ..getBlogsData()
+            ..allBlogs,
         ),
         BlocProvider(
           create: (BuildContext context) => HomeTapsCubit(),
         ),
-
       ],
       child: BlocConsumer<AppCubit, AppState>(
         listener: (context, state) => () {},
@@ -72,7 +75,6 @@ class MyApp extends StatelessWidget {
             title: 'La Vie',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-
               appBarTheme: const AppBarTheme(color: Colors.white),
               scaffoldBackgroundColor: Colors.white,
               elevatedButtonTheme: ElevatedButtonThemeData(

@@ -180,7 +180,7 @@ class ProductCard extends StatelessWidget {
             child: image != 'https://lavie.orangedigitalcenteregypt.com'
                 ? Image(
                     image: NetworkImage(image!),
-                    fit: BoxFit.fitHeight,
+                    fit: BoxFit.contain,
                   )
                 : Image.asset(
                     '${imageAsset}product_image.png',

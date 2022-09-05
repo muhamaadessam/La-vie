@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:la_vie/Shared/Constant/text.dart';
 import 'package:la_vie/Shared/Cubit/cubit.dart';
 import 'package:la_vie/Shared/Cubit/states.dart';
 import 'package:la_vie/presentation/screens/NotificationScreens/notification_design.dart';
-
-import '../../../Shared/Constant/images.dart';
-import '../Forum/post.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({Key? key}) : super(key: key);
@@ -33,6 +29,7 @@ class NotificationsScreen extends StatelessWidget {
           body:  state is UserLoadingState || user.userModel == null
               ? const Center(child: CircularProgressIndicator())
               : ListView.separated(
+            physics: BouncingScrollPhysics(),
               itemBuilder: (context, index) => NotificationDesign(
                   message:
                       user.userModel!.data!.userNotification![index].message,
@@ -40,14 +37,12 @@ class NotificationsScreen extends StatelessWidget {
                       user.userModel!.data!.userNotification![index].createdAt,
                   imageUrl:
                       user.userModel!.data!.userNotification![index].imageUrl),
-              separatorBuilder: (context, index) => const Expanded(
-                    child: Divider(
-                      indent: 8,
-                      endIndent: 8,
-                      thickness: 1,
-                      color: Color.fromRGBO(151, 151, 151, 1),
-                    ),
-                  ),
+              separatorBuilder: (context, index) => const Divider(
+                indent: 8,
+                endIndent: 8,
+                thickness: 1,
+                color: Color.fromRGBO(151, 151, 151, 1),
+              ),
               itemCount: user.userModel!.data!.userNotification!.length),
         );
       },

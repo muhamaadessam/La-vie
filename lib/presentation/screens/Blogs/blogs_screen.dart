@@ -39,7 +39,7 @@ class BlogsScreen extends StatelessWidget {
         body: state is BlogsLoadingState
             ? const Center(child: CircularProgressIndicator())
             : Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: ListView.separated(
                   itemBuilder: (context, index) => BlogsCard(
                     title: blogs.allBlogs![index].name,

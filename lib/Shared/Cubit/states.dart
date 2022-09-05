@@ -99,12 +99,11 @@ class ForumsErrorState extends ForumsStates {}
 class ForumsSearchLoadingState extends ForumsStates {}
 class ForumsSearchSuccessState extends ForumsStates {}
 class ForumsSearchErrorState extends ForumsStates {}
-class ForumsAddPostLoadingState extends ForumsStates {}
-class ForumsAddPostSuccessState extends ForumsStates {}
-class ForumsAddPostErrorState extends ForumsStates {}
-class ForumsAddImagePostLoadingState extends ForumsStates {}
-class ForumsAddImagePostSuccessState extends ForumsStates {}
-class ForumsAddImagePostErrorState extends ForumsStates {}
+class ForumsLikeSuccessState extends ForumsStates {}
+class ForumsLikeErrorState extends ForumsStates {}
+class ForumsCommentSuccessState extends ForumsStates {}
+class ForumsCommentErrorState extends ForumsStates {}
+
 
 
 abstract class MyForumsStates{}
@@ -116,6 +115,12 @@ class MyForumsLikeSuccessState extends MyForumsStates {}
 class MyForumsLikeErrorState extends MyForumsStates {}
 class MyForumsCommentSuccessState extends MyForumsStates {}
 class MyForumsCommentErrorState extends MyForumsStates {}
+class ForumsAddPostLoadingState extends MyForumsStates {}
+class ForumsAddPostSuccessState extends MyForumsStates {}
+class ForumsAddPostErrorState extends MyForumsStates {}
+class ForumsAddImagePostLoadingState extends MyForumsStates {}
+class ForumsAddImagePostSuccessState extends MyForumsStates {}
+class ForumsAddImagePostErrorState extends MyForumsStates {}
 
 
 abstract class ForumsTabsStates {}

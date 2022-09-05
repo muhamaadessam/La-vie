@@ -28,7 +28,7 @@ class NotificationDesign extends StatelessWidget {
         ? imageProvider = NetworkImage(imageUrl!)
         : imageProvider = AssetImage('${imageAsset}profile.png');
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

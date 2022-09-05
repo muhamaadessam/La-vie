@@ -12,15 +12,18 @@ class Post extends StatelessWidget {
     required this.index,
     this.forumsCubit,
     this.myForumsCubit,
+    this.search,
   }) : super(key: key);
 
   final ForumsModel forumsModel;
   final ForumsCubit? forumsCubit;
   final MyForumsCubit? myForumsCubit;
   final int index;
+  final String? search;
 
   @override
   Widget build(BuildContext context) {
+
     TextEditingController controller = TextEditingController();
     var formKey = GlobalKey<FormState>();
     ForumsCubit forums = ForumsCubit.get(context);
@@ -109,6 +112,11 @@ class Post extends StatelessWidget {
                   child: forumsModel.data![index].imageUrl !=
                           'https://lavie.orangedigitalcenteregypt.comnull'
                       ? Image(
+                          loadingBuilder: (context, child, loadingProgress) =>
+                              (loadingProgress == null)
+                                  ? child
+                                  : const Center(
+                                      child: CircularProgressIndicator()),
                           image:
                               NetworkImage(forumsModel.data![index].imageUrl!),
                           width: double.infinity,
@@ -122,19 +130,24 @@ class Post extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 16.0, left: 16),
                   child: Row(
                     children: [
-                      InkWell(
-                        onTap: () {
-                          myForums
-                              .makeLikePost(forumsModel.data![index].forumId!);
+                      TextButton(
+                        onPressed: () {
+                          if (myForumsCubit != null) {
+                            myForums.makeLikePost(
+                                forumsModel.data![index].forumId!);
+                          }
+                          if (forumsCubit != null) {
+                            forums.makeLikePost(
+                                forumsModel.data![index].forumId!);
+                          }
+                          forumsCubit!.lik = !forumsCubit!.lik!;
                         },
                         child: Row(
                           children: [
                             Image.asset(
                               '${imageAsset}Like.png',
                               width: 18,
-                              color: myForums.likeList[
-                                          forumsModel.data![index].forumId!] ==
-                                      null
+                              color: !forumsCubit!.lik!
                                   ? const Color.fromRGBO(0, 0, 0, .6)
                                   : primaryColor,
                             ),
@@ -208,26 +221,23 @@ class Post extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      /*CustomTextFormField(
-                                          title: 'Comment',
-                                          isPassword: false,
-                                          controller: controller,
-                                          validation: (value) {
-                                            if (value!.isEmpty) {
-                                              return 'Entre your Comment';
-                                            } else {
-                                              return null;
-                                            }
-                                          }),*/
                                       actions: [
                                         ElevatedButton(
                                           onPressed: () {
                                             if (formKey.currentState!
                                                 .validate()) {
-                                              myForums.makeCommentPost(
-                                                  forumsModel
-                                                      .data![index].forumId!,
-                                                  controller.text);
+                                              if (myForumsCubit != null) {
+                                                myForums.makeCommentPost(
+                                                    forumsModel
+                                                        .data![index].forumId!,
+                                                    controller.text);
+                                              }
+                                              if (forumsCubit != null) {
+                                                forums.makeCommentPost(
+                                                    forumsModel
+                                                        .data![index].forumId!,
+                                                    controller.text);
+                                              }
                                               Navigator.pop(context);
                                             }
                                           },
@@ -242,6 +252,7 @@ class Post extends StatelessWidget {
                                   ),
                                 );
                               });
+                          myForumsCubit!.getMyForumsData();
                         },
                         child: Text(
                           '${forumsModel.data![index].forumComments!.length} Replies',
