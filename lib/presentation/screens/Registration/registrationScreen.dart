@@ -123,7 +123,11 @@ class RegistrationScreen extends StatelessWidget {
                         TextButton(
                           child: Image.asset('assets/images/Facebook.png'),
                           onPressed: () {
-
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const BottomBar()));
+                            print("Facebook");
                           },
                         ),
                       ],
